@@ -9,9 +9,11 @@ function AddTodoForm({ onAddTodo }) {
     }
     function handleAddTodo(e) {
         e.preventDefault();
-        const form = e.target;
-        onAddTodo(todoTitle);
-        form.reset();
+        onAddTodo({
+            id: Date.now(),
+            title: todoTitle
+        });
+        setTodoTitle("");
     }
 
     return (
@@ -23,7 +25,7 @@ function AddTodoForm({ onAddTodo }) {
                 name="title"
                 value={todoTitle}
                 onChange={handleTitleChange}
-            ></input>
+            />
             <button type="submit">Add</button>
         </form>
     );
