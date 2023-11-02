@@ -21,11 +21,11 @@ function App() {
         setTodoList([...todoList, newTodo]);
     }
     return (
-        <div>
+        <>
             <h1 style={{ textAlign: "center" }}>Todo List</h1>
             <AddTodoForm onAddTodo={addTodo} />
             <TodoList todoList={todoList} />
-        </div>
+        </>
     );
 }
 
