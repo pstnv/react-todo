@@ -7,6 +7,7 @@ const TODOLIST_KEY = "savedTodoList";
 function App() {
     const savedTodoList = JSON.parse(localStorage.getItem(TODOLIST_KEY)) || [];
     const [todoList, setTodoList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -18,10 +19,14 @@ function App() {
             }, 2000);
         }).then((result) => {
             setTodoList(result.data.todoList);
+            setIsLoading(false);
         });
     }, []);
 
     useEffect(() => {
+        if (isLoading) {
+            return;
+        }
         const todoListJSON = JSON.stringify(todoList);
         localStorage.setItem(TODOLIST_KEY, todoListJSON);
     }, [todoList]);
