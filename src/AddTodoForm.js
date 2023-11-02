@@ -12,7 +12,7 @@ function AddTodoForm({ onAddTodo }) {
         e.preventDefault();
         onAddTodo({
             id: Date.now(),
-            title: todoTitle
+            title: todoTitle,
         });
         setTodoTitle("");
     }
@@ -20,10 +20,9 @@ function AddTodoForm({ onAddTodo }) {
     return (
         <form onSubmit={handleAddTodo}>
             <InputWithLabel
-                label="Title"
                 todoTitle={todoTitle}
                 handleTitleChange={handleTitleChange}
-            />
+            >Title</InputWithLabel>
             <button type="submit">Add</button>
         </form>
     );
