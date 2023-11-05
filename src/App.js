@@ -7,6 +7,7 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route element={<TodoMain />} path="/" />
+                <Route element={<h1>New Todo List</h1>} path="/new" />
             </Routes>
         </BrowserRouter>
         
