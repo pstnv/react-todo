@@ -10,10 +10,7 @@ function AddTodoForm({ onAddTodo }) {
     }
     function handleAddTodo(e) {
         e.preventDefault();
-        onAddTodo({
-            id: Date.now(),
-            title: todoTitle,
-        });
+        onAddTodo(todoTitle);
         setTodoTitle("");
     }
 
