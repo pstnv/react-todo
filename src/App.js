@@ -4,19 +4,33 @@ import TodoList from "./TodoList";
 import AddTodoForm from "./AddTodoForm";
 const TODOLIST_KEY = "savedTodoList";
 
-function useSemiPersistentState() {
+function App() {
     const savedTodoList = JSON.parse(localStorage.getItem(TODOLIST_KEY)) || [];
-    const [todoList, setTodoList] = useState(savedTodoList);
+    const [todoList, setTodoList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve({
+                    data: {
+                        todoList: savedTodoList,
+                    },
+                });
+            }, 2000);
+        }).then((result) => {
+            setTodoList(result.data.todoList);
+            setIsLoading(false);
+        });
+    }, []);
 
     useEffect(() => {
+        if (isLoading) {
+            return;
+        }
         const todoListJSON = JSON.stringify(todoList);
         localStorage.setItem(TODOLIST_KEY, todoListJSON);
     }, [todoList]);
-    return [todoList, setTodoList];
-}
 
-function App() {
-    const [todoList, setTodoList] = useSemiPersistentState();
     function addTodo(newTodo) {
         setTodoList([...todoList, newTodo]);
     }
@@ -27,7 +41,11 @@ function App() {
         <>
             <h1 style={{ textAlign: "center" }}>Todo List</h1>
             <AddTodoForm onAddTodo={addTodo} />
-            <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+            {isLoading ? (
+                <p>Loading...</p>
+            ) : (
+                <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+            )}
         </>
     );
 }
