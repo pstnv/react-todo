@@ -2,20 +2,22 @@ import { useState, useEffect } from "react";
 import style from "./TodoMain.module.css";
 import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
-const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}/`;
-
+const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
+const tokenAPI = process.env.REACT_APP_AIRTABLE_API_TOKEN;
+    
 function TodoMain() {
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchData = async (params) => {
+    const fetchData = async (params, id = "") => {
         const options = {
             ...params,
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_TOKEN}`,
+                Authorization: `Bearer ${tokenAPI}`,
             },
         };
+        const url = id ? `${urlAPI}/${id}` : urlAPI;
         try {
             const response = await fetch(url, options);
             if (!response.ok) {
@@ -64,7 +66,12 @@ function TodoMain() {
         };
         setTodoList([...todoList, newTodo]);
     };
-    function removeTodo(id) {
+
+    async function removeTodo(id) {
+        const params = {
+            method: "DELETE",
+        };
+        fetchData(params, id);
         setTodoList(todoList.filter((todo) => todo.id !== id));
     }
     return (
