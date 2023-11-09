@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import TodoMain from "./TodoMain";
+import TodoMain from "./components/TodoMain/TodoMain";
 
 function App() {
     return (
@@ -10,7 +10,6 @@ function App() {
                 <Route element={<h1>New Todo List</h1>} path="/new" />
             </Routes>
         </BrowserRouter>
-        
     );
 }
 

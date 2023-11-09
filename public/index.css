@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+    background-color: #000000;
+    font-family: "Roboto", sans-serif;
+    color: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+@media all and (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+}
