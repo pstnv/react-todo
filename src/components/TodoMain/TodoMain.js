@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import style from "./TodoMain.module.css";
-import TodoList from "./TodoList";
-import AddTodoForm from "./AddTodoForm";
+import TodoList from "../TodoList/TodoList";
+import AddTodoForm from "../AddTodoForm/AddTodoForm";
 const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}/`;
 
 function TodoMain() {
