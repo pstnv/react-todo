@@ -1,0 +1,12 @@
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
+    margin-left: 20px;
+    padding: 5px;
+    min-height: 30px;
+    cursor: pointer;
+}

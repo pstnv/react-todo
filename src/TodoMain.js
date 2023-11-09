@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import style from "./TodoMain.module.css";
 import TodoList from "./TodoList";
 import AddTodoForm from "./AddTodoForm";
 const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}/`;
@@ -67,15 +68,15 @@ function TodoMain() {
         setTodoList(todoList.filter((todo) => todo.id !== id));
     }
     return (
-        <>
-            <h1 style={{ textAlign: "center" }}>Todo List</h1>
+        <div className={style.container}>
+            <h1 className={style.header}>Todo List</h1>
             <AddTodoForm onAddTodo={addTodo} />
             {isLoading ? (
-                <p>Loading...</p>
+                <p className={style.loading}>Loading...</p>
             ) : (
                 <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
             )}
-        </>
+        </div>
     );
 }
 

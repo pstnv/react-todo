@@ -10,7 +10,6 @@ function App() {
                 <Route element={<h1>New Todo List</h1>} path="/new" />
             </Routes>
         </BrowserRouter>
-        
     );
 }
 
