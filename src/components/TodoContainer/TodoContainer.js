@@ -36,12 +36,22 @@ function TodoContainer() {
                 method: "GET",
             };
             const data = await fetchData(params);
-            const todos = data.records.map((record) => {
-                return {
-                    id: record.id,
-                    title: record.fields.title,
-                };
-            });
+            const todos = data.records
+                .map((record) => {
+                    return {
+                        id: record.id,
+                        title: record.fields.title,
+                    };
+                })
+                .sort((objectA, objectB) => {
+                    if (objectA.title > objectB.title) {
+                        return 1;
+                    } else if (objectA.title === objectB.title) {
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+                });
             setTodoList(todos);
             setIsLoading(false);
         };
