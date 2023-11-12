@@ -34,7 +34,8 @@ function TodoContainer() {
             const params = {
                 method: "GET",
             };
-            const data = await fetchData(urlAPI, params);
+            const url = `${urlAPI}?view=Grid%20view`;
+            const data = await fetchData(url, params);
             const todos = data.records.map((record) => {
                 return {
                     id: record.id,
