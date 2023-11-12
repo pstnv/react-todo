@@ -9,7 +9,7 @@ function TodoContainer() {
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchData = async (params, id = "") => {
+    const fetchData = async (url, params) => {
         const options = {
             ...params,
             headers: {
@@ -17,7 +17,6 @@ function TodoContainer() {
                 Authorization: `Bearer ${tokenAPI}`,
             },
         };
-        const url = id ? `${urlAPI}/${id}` : urlAPI;
         try {
             const response = await fetch(url, options);
             if (!response.ok) {
@@ -35,7 +34,7 @@ function TodoContainer() {
             const params = {
                 method: "GET",
             };
-            const data = await fetchData(params);
+            const data = await fetchData(urlAPI, params);
             const todos = data.records.map((record) => {
                 return {
                     id: record.id,
@@ -58,7 +57,7 @@ function TodoContainer() {
             method: "POST",
             body: JSON.stringify(todo),
         };
-        const data = await fetchData(params);
+        const data = await fetchData(urlAPI, params);
         const newTodo = {
             id: data.id,
             title: data.fields.title,
@@ -70,7 +69,8 @@ function TodoContainer() {
         const params = {
             method: "DELETE",
         };
-        fetchData(params, id);
+        const url = `${urlAPI}/${id}`;
+        fetchData(url, params);
         setTodoList(todoList.filter((todo) => todo.id !== id));
     }
     return (
