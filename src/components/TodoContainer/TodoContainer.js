@@ -9,7 +9,7 @@ function TodoContainer() {
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchData = async (url, params) => {
+    const fetchData = async (params, id = "") => {
         const options = {
             ...params,
             headers: {
@@ -17,6 +17,7 @@ function TodoContainer() {
                 Authorization: `Bearer ${tokenAPI}`,
             },
         };
+        const url = id ? `${urlAPI}/${id}` : urlAPI;
         try {
             const response = await fetch(url, options);
             if (!response.ok) {
@@ -34,8 +35,7 @@ function TodoContainer() {
             const params = {
                 method: "GET",
             };
-            const url = `${urlAPI}?view=Grid%20view&sort[0][field]=title&sort[0][direction]=asc`;
-            const data = await fetchData(url, params);
+            const data = await fetchData(params);
             const todos = data.records.map((record) => {
                 return {
                     id: record.id,
@@ -58,7 +58,7 @@ function TodoContainer() {
             method: "POST",
             body: JSON.stringify(todo),
         };
-        const data = await fetchData(urlAPI, params);
+        const data = await fetchData(params);
         const newTodo = {
             id: data.id,
             title: data.fields.title,
@@ -70,8 +70,7 @@ function TodoContainer() {
         const params = {
             method: "DELETE",
         };
-        const url = `${urlAPI}/${id}`;
-        fetchData(url, params);
+        fetchData(params, id);
         setTodoList(todoList.filter((todo) => todo.id !== id));
     }
     return (
