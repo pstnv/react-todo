@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import style from "./TodoMain.module.css";
+import style from "./TodoContainer.module.css";
 import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
 const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
 const tokenAPI = process.env.REACT_APP_AIRTABLE_API_TOKEN;
-    
-function TodoMain() {
+
+function TodoContainer() {
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -87,4 +87,4 @@ function TodoMain() {
     );
 }
 
-export default TodoMain;
+export default TodoContainer;
