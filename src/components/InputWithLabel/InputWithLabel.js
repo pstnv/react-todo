@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import style from './InputWithLabel.module.css';
+import PropTypes from "prop-types";
+import style from "./InputWithLabel.module.css";
 
 function InputWithLabel({
     children,
@@ -14,7 +15,7 @@ function InputWithLabel({
     });
     return (
         <>
-            <label htmlFor={id} >{children}</label>
+            <label htmlFor={id}>{children}</label>
             <input
                 type={type}
                 id={id}
@@ -26,4 +27,14 @@ function InputWithLabel({
         </>
     );
 }
+InputWithLabel.defaultProps = {
+    type: "text",
+};
+InputWithLabel.propTypes = {
+    children: PropTypes.node,
+    type: PropTypes.string,
+    id: PropTypes.string,
+    todoTitle: PropTypes.string,
+    handleTitleChange: PropTypes.func.isRequired,
+};
 export default InputWithLabel;
