@@ -30,22 +30,21 @@ function TodoContainer() {
         }
     };
 
-    const fetchTodos = async () => {
-        const params = {
-            method: "GET",
-        };
-        const data = await fetchData(params);
-        const todos = data.records.map((record) => {
-            return {
-                id: record.id,
-                title: record.fields.title,
-            };
-        });
-        setTodoList(todos);
-        setIsLoading(false);
-    };
-
     useEffect(() => {
+        const fetchTodos = async () => {
+            const params = {
+                method: "GET",
+            };
+            const data = await fetchData(params);
+            const todos = data.records.map((record) => {
+                return {
+                    id: record.id,
+                    title: record.fields.title,
+                };
+            });
+            setTodoList(todos);
+            setIsLoading(false);
+        };
         fetchTodos();
     }, []);
 
