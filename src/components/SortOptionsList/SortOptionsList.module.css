@@ -1,0 +1,10 @@
+.optionsContainer {
+    margin: 30px auto;
+    width: 400px;
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
