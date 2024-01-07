@@ -13,48 +13,26 @@ const sortOptions = [
 ];
 const sortList = {
     asc(list) {
-        list.sort((objectA, objectB) => {
-            if (objectA.title > objectB.title) {
-                return 1;
-            } else if (objectA.title === objectB.title) {
-                return 0;
-            } else {
-                return -1;
-            }
-        });
+        list.sort((objectA, objectB) =>
+            objectA.title.localeCompare(objectB.title)
+        );
     },
     desc(list) {
-        list.sort((objectA, objectB) => {
-            if (objectA.title > objectB.title) {
-                return -1;
-            } else if (objectA.title === objectB.title) {
-                return 0;
-            } else {
-                return 1;
-            }
-        });
+        list.sort((objectA, objectB) =>
+            objectB.title.localeCompare(objectA.title)
+        );
     },
     new(list) {
-        list.sort((objectA, objectB) => {
-            if (objectA.createdTime < objectB.createdTime) {
-                return 1;
-            }
-            if (objectA.createdTime > objectB.createdTime) {
-                return -1;
-            }
-            return 0;
-        });
+        list.sort(
+            (objectA, objectB) =>
+                new Date(objectB.createdTime) - new Date(objectA.createdTime)
+        );
     },
     old(list) {
-        list.sort((objectA, objectB) => {
-            if (objectA.createdTime < objectB.createdTime) {
-                return -1;
-            }
-            if (objectA.createdTime > objectB.createdTime) {
-                return 1;
-            }
-            return 0;
-        });
+        list.sort(
+            (objectA, objectB) =>
+                new Date(objectA.createdTime) - new Date(objectB.createdTime)
+        );
     },
 };
 
