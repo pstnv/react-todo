@@ -33,7 +33,6 @@ function AddTodoForm({
                 id="todoTitle"
                 todoTitle={isEditing ? updatingTodoTitle : todoTitle}
                 handleTitleChange={handleTitleChange}
-                // placeholder={isUpdating ? updatingTodoTitle : ""}
             >
                 Title
             </InputWithLabel>
