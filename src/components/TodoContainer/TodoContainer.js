@@ -8,6 +8,7 @@ const tokenAPI = process.env.REACT_APP_AIRTABLE_API_TOKEN;
 const sortOptions = [
     { name: "Newest", option: "new" },
     { name: "Oldest", option: "old" },
+    { name: "Recently Edited", option: "edit" },
     { name: "A to Z", option: "asc" },
     { name: "Z to A", option: "desc" },
 ];
@@ -20,6 +21,12 @@ const sortList = {
     desc(list) {
         list.sort((objectA, objectB) =>
             objectB.title.localeCompare(objectA.title)
+        );
+    },
+    edit(list) {
+        list.sort(
+            (objectA, objectB) =>
+                new Date(objectB.edited) - new Date(objectA.edited)
         );
     },
     new(list) {
@@ -39,7 +46,10 @@ const sortList = {
 function TodoContainer() {
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [sortOption, setSortOption] = useState("new");
+    const [sortOption, setSortOption] = useState("edit");
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [updatingTodoId, setUpdatingTodoId] = useState(null);
+    const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
 
     const fetchData = async (params, id = "") => {
         const options = {
@@ -72,6 +82,7 @@ function TodoContainer() {
                 return {
                     id: record.id,
                     title: record.fields.title,
+                    edited: record.fields.edited || record.createdTime,
                     createdTime: record.createdTime,
                 };
             });
@@ -94,9 +105,13 @@ function TodoContainer() {
     }, [sortOption, todoList.length]);
 
     const addTodo = async (title) => {
+        if (title.length === 0) {
+            return;
+        }
         const todo = {
             fields: {
                 title,
+                edited: new Date().toISOString(),
             },
         };
         const params = {
@@ -107,17 +122,64 @@ function TodoContainer() {
         const newTodo = {
             id: data.id,
             title: data.fields.title,
+            edited: data.fields.edited,
             createdTime: data.createdTime,
         };
         setTodoList([...todoList, newTodo]);
     };
 
     async function removeTodo(id) {
+        if (id === updatingTodoId) {
+            setIsUpdating(false);
+            setUpdatingTodoId(null);
+            setUpdatingTodoTitle("");
+        }
         const params = {
             method: "DELETE",
         };
         fetchData(params, id);
         setTodoList(todoList.filter((todo) => todo.id !== id));
+    }
+
+    function editTodo(id, title) {
+        setIsUpdating(true);
+        setUpdatingTodoId(id);
+        setUpdatingTodoTitle(title);
+    }
+
+    async function updateTodo(title) {
+        setIsUpdating(false);
+        setUpdatingTodoId(null);
+        setUpdatingTodoTitle("");
+        if (title.length === 0) {
+            removeTodo(updatingTodoId);
+            return;
+        }
+
+        const sentTodo = {
+            fields: {
+                title,
+                edited: new Date().toISOString(),
+            },
+        };
+        const params = {
+            method: "PATCH",
+            body: JSON.stringify(sentTodo),
+        };
+        const data = await fetchData(params, updatingTodoId);
+        const editedTodo = {
+            id: data.id,
+            title: data.fields.title,
+            edited: data.fields.edited,
+            createdTime: data.createdTime,
+        };
+        const editedTodoList = todoList.map((todo) => {
+            return todo.id === updatingTodoId ? editedTodo : todo;
+        });
+        if (sortOption) {
+            sortList[sortOption](editedTodoList);
+        }
+        setTodoList(editedTodoList);
     }
 
     function sortTodoList(option) {
@@ -127,7 +189,12 @@ function TodoContainer() {
     return (
         <div className={style.container}>
             <h1 className={style.header}>Todo List</h1>
-            <AddTodoForm onAddTodo={addTodo} />
+            <AddTodoForm
+                onAddTodo={addTodo}
+                isUpdating={isUpdating}
+                updatingTodoTitle={updatingTodoTitle}
+                onUpdateTodo={updateTodo}
+            />
             {!isLoading && (
                 <SortOptionsList
                     sortOptions={sortOptions}
@@ -137,7 +204,11 @@ function TodoContainer() {
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>
             ) : (
-                <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+                <TodoList
+                    todoList={todoList}
+                    onRemoveTodo={removeTodo}
+                    onEditTodo={editTodo}
+                />
             )}
         </div>
     );

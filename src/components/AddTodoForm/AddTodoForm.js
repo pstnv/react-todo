@@ -4,15 +4,26 @@ import PropTypes from "prop-types";
 import style from "./AddTodoForm.module.css";
 import InputWithLabel from "../InputWithLabel/InputWithLabel";
 
-function AddTodoForm({ onAddTodo }) {
+function AddTodoForm({
+    onAddTodo,
+    isUpdating,
+    updatingTodoTitle,
+    onUpdateTodo,
+}) {
     const [todoTitle, setTodoTitle] = useState("");
+    const [isEditing, setIsEditing] = useState(true);
+
     function handleTitleChange(e) {
+        if (isEditing) {
+            setIsEditing(false);
+        }
         const newTodoTitle = e.target.value;
         setTodoTitle(newTodoTitle);
     }
     function handleAddTodo(e) {
         e.preventDefault();
-        onAddTodo(todoTitle);
+        setIsEditing(true);
+        isUpdating ? onUpdateTodo(todoTitle) : onAddTodo(todoTitle);
         setTodoTitle("");
     }
 
@@ -20,8 +31,9 @@ function AddTodoForm({ onAddTodo }) {
         <form onSubmit={handleAddTodo} className={style.form}>
             <InputWithLabel
                 id="todoTitle"
-                todoTitle={todoTitle}
+                todoTitle={isEditing ? updatingTodoTitle : todoTitle}
                 handleTitleChange={handleTitleChange}
+                // placeholder={isUpdating ? updatingTodoTitle : ""}
             >
                 Title
             </InputWithLabel>

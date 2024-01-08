@@ -8,6 +8,7 @@ function InputWithLabel({
     id,
     todoTitle,
     handleTitleChange,
+    placeholder
 }) {
     const inputRef = useRef();
     useEffect(() => {
@@ -23,6 +24,7 @@ function InputWithLabel({
                 onChange={handleTitleChange}
                 ref={inputRef}
                 className={style.input}
+                placeholder={placeholder}
             />
         </>
     );
