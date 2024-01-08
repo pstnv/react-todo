@@ -151,11 +151,9 @@ function TodoContainer() {
         setIsUpdating(false);
         setUpdatingTodoId(null);
         setUpdatingTodoTitle("");
-        if (title.length === 0) {
-            removeTodo(updatingTodoId);
+        if (updatingTodoTitle === title) {
             return;
         }
-
         const sentTodo = {
             fields: {
                 title,

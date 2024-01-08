@@ -23,7 +23,9 @@ function AddTodoForm({
     function handleAddTodo(e) {
         e.preventDefault();
         setIsEditing(true);
-        isUpdating ? onUpdateTodo(todoTitle) : onAddTodo(todoTitle);
+        isUpdating
+            ? onUpdateTodo(todoTitle || updatingTodoTitle)
+            : onAddTodo(todoTitle);
         setTodoTitle("");
     }
 
