@@ -47,7 +47,6 @@ function TodoContainer() {
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [sortOption, setSortOption] = useState("edit");
-    const [isUpdating, setIsUpdating] = useState(false);
     const [updatingTodoId, setUpdatingTodoId] = useState(null);
     const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
 
@@ -105,7 +104,7 @@ function TodoContainer() {
     }, [sortOption, todoList.length]);
 
     const addTodo = async (title) => {
-        if (title.length === 0) {
+        if (!title) {
             return;
         }
         const todo = {
@@ -130,7 +129,6 @@ function TodoContainer() {
 
     async function removeTodo(id) {
         if (id === updatingTodoId) {
-            setIsUpdating(false);
             setUpdatingTodoId(null);
             setUpdatingTodoTitle("");
         }
@@ -142,16 +140,14 @@ function TodoContainer() {
     }
 
     function editTodo(id, title) {
-        setIsUpdating(true);
         setUpdatingTodoId(id);
         setUpdatingTodoTitle(title);
     }
 
     async function updateTodo(title) {
-        setIsUpdating(false);
         setUpdatingTodoId(null);
         setUpdatingTodoTitle("");
-        if (updatingTodoTitle === title) {
+        if (!title) {
             return;
         }
         const sentTodo = {
@@ -189,7 +185,6 @@ function TodoContainer() {
             <h1 className={style.header}>Todo List</h1>
             <AddTodoForm
                 onAddTodo={addTodo}
-                isUpdating={isUpdating}
                 updatingTodoTitle={updatingTodoTitle}
                 onUpdateTodo={updateTodo}
             />

@@ -6,7 +6,10 @@ function TodoListItem({ id, title, onEditTodo, onRemoveTodo }) {
     return (
         <li className={style.ListItem}>
             {title}
-            <button onClick={() => onEditTodo(id, title)} className={style.button}>
+            <button
+                onClick={() => onEditTodo(id, title)}
+                className={style.button}
+            >
                 Edit
             </button>
             <button onClick={() => onRemoveTodo(id)} className={style.button}>

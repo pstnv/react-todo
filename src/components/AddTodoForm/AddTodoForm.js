@@ -1,45 +1,37 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import style from "./AddTodoForm.module.css";
 import InputWithLabel from "../InputWithLabel/InputWithLabel";
 
-function AddTodoForm({
-    onAddTodo,
-    isUpdating,
-    updatingTodoTitle,
-    onUpdateTodo,
-}) {
+function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {
     const [todoTitle, setTodoTitle] = useState("");
-    const [isEditing, setIsEditing] = useState(true);
 
     function handleTitleChange(e) {
-        if (isEditing) {
-            setIsEditing(false);
-        }
         const newTodoTitle = e.target.value;
         setTodoTitle(newTodoTitle);
     }
     function handleAddTodo(e) {
         e.preventDefault();
-        setIsEditing(true);
-        isUpdating
-            ? onUpdateTodo(todoTitle || updatingTodoTitle)
-            : onAddTodo(todoTitle);
+        updatingTodoTitle ? onUpdateTodo(todoTitle) : onAddTodo(todoTitle);
         setTodoTitle("");
     }
+
+    useEffect(() => {
+        setTodoTitle(updatingTodoTitle);
+    }, [updatingTodoTitle]);
 
     return (
         <form onSubmit={handleAddTodo} className={style.form}>
             <InputWithLabel
                 id="todoTitle"
-                todoTitle={isEditing ? updatingTodoTitle : todoTitle}
+                todoTitle={todoTitle}
                 handleTitleChange={handleTitleChange}
             >
                 Title
             </InputWithLabel>
             <button type="submit" className={style.btn}>
-                Add
+                {!todoTitle && updatingTodoTitle ? "Cancel" : "Save"}
             </button>
         </form>
     );
