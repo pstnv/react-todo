@@ -54,11 +54,17 @@ function TodoContainer() {
             };
             const data = await fetchData(params);
             const todos = data.records.map((record) => {
+                const {
+                    fields: { title, edited, completed },
+                    id,
+                    createdTime,
+                } = record;
                 return {
-                    id: record.id,
-                    title: record.fields.title,
-                    edited: record.fields.edited || record.createdTime,
-                    createdTime: record.createdTime,
+                    id,
+                    title,
+                    edited: edited || createdTime,
+                    completed: completed ?? false,
+                    createdTime,
                 };
             });
             setTodoList(todos);
@@ -119,6 +125,7 @@ function TodoContainer() {
         const todo = {
             fields: {
                 title,
+                completed: false,
                 edited: new Date().toISOString(),
             },
         };
@@ -130,9 +137,10 @@ function TodoContainer() {
         const newTodo = {
             id: data.id,
             title: data.fields.title,
+            completed: data.fields.completed,
             edited: data.fields.edited,
             createdTime: data.createdTime,
-        };
+        };        
         setTodoList([...todoList, newTodo]);
     };
 
@@ -173,6 +181,7 @@ function TodoContainer() {
         const editedTodo = {
             id: data.id,
             title: data.fields.title,
+            completed: data.fields.completed,
             edited: data.fields.edited,
             createdTime: data.createdTime,
         };
@@ -180,6 +189,32 @@ function TodoContainer() {
             return todo.id === updatingTodoId ? editedTodo : todo;
         });
         setTodoList(editedTodoList);
+    }
+
+    async function completeTodo(id) {
+        const todo = todoList.find(item => item.id === id);
+        const sentTodo = {
+            fields: {
+                completed: !todo.completed
+            },
+        };
+        const params = {
+            method: "PATCH",
+            body: JSON.stringify(sentTodo),
+        };
+        const data = await fetchData(params, id);
+        const editedTodo = {
+            id: data.id,
+            title: data.fields.title,
+            completed: data.fields.completed,
+            edited: data.fields.edited,
+            createdTime: data.createdTime,
+        };
+        const editedTodoList = todoList.map((todo) => {
+            return todo.id === id ? editedTodo : todo;
+        });
+        setTodoList(editedTodoList);
+        console.log(editedTodo);
     }
 
     function sortTodoList(option = defaultSorting) {
@@ -206,7 +241,8 @@ function TodoContainer() {
                 <TodoList
                     todoList={todoList}
                     onRemoveTodo={removeTodo}
-                    onEditTodo={editTodo}
+                        onEditTodo={editTodo}
+                        onCompleteTodo={completeTodo}
                 />
             )}
         </div>

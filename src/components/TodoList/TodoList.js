@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import style from "./TodoList.module.css";
 import TodoListItem from "../TodoListItem/TodoListItem";
 
-function TodoList({ todoList, onEditTodo, onRemoveTodo }) {
+function TodoList({ todoList, onEditTodo, onRemoveTodo, onCompleteTodo }) {
     return (
         <ul className={style.list}>
             {todoList.map((todo) => (
@@ -12,6 +12,7 @@ function TodoList({ todoList, onEditTodo, onRemoveTodo }) {
                     {...todo}
                     onEditTodo={onEditTodo}
                     onRemoveTodo={onRemoveTodo}
+                    onCompleteTodo={onCompleteTodo}
                 />
             ))}
         </ul>
