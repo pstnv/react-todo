@@ -5,7 +5,6 @@ import AddTodoForm from "./AddTodoForm";
 const TODOLIST_KEY = "savedTodoList";
 
 function App() {
-    const savedTodoList = JSON.parse(localStorage.getItem(TODOLIST_KEY)) || [];
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -13,7 +12,7 @@ function App() {
             setTimeout(() => {
                 resolve({
                     data: {
-                        todoList: savedTodoList,
+                        todoList: JSON.parse(localStorage.getItem(TODOLIST_KEY)) || []
                     },
                 });
             }, 2000);
@@ -29,7 +28,7 @@ function App() {
         }
         const todoListJSON = JSON.stringify(todoList);
         localStorage.setItem(TODOLIST_KEY, todoListJSON);
-    }, [todoList]);
+    }, [todoList, isLoading]);
 
     function addTodo(newTodo) {
         setTodoList([...todoList, newTodo]);
