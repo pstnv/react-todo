@@ -4,7 +4,8 @@ import PropTypes from "prop-types";
 import style from "./AddTodoForm.module.css";
 import InputWithLabel from "../InputWithLabel/InputWithLabel";
 
-function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {
+function
+    AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {
     const [todoTitle, setTodoTitle] = useState("");
 
     function handleTitleChange(e) {

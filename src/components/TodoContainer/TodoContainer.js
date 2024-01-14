@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import style from "./TodoContainer.module.css";
 import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
@@ -12,43 +12,19 @@ const sortOptions = [
     { name: "A to Z", option: "asc" },
     { name: "Z to A", option: "desc" },
 ];
-const sortList = {
-    asc(list) {
-        list.sort((objectA, objectB) =>
-            objectA.title.localeCompare(objectB.title)
-        );
-    },
-    desc(list) {
-        list.sort((objectA, objectB) =>
-            objectB.title.localeCompare(objectA.title)
-        );
-    },
-    edit(list) {
-        list.sort(
-            (objectA, objectB) =>
-                new Date(objectB.edited) - new Date(objectA.edited)
-        );
-    },
-    new(list) {
-        list.sort(
-            (objectA, objectB) =>
-                new Date(objectB.createdTime) - new Date(objectA.createdTime)
-        );
-    },
-    old(list) {
-        list.sort(
-            (objectA, objectB) =>
-                new Date(objectA.createdTime) - new Date(objectB.createdTime)
-        );
-    },
-};
+const defaultSorting = "edit";
 
 function TodoContainer() {
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [sortOption, setSortOption] = useState("edit");
+    const [sortOption, setSortOption] = useState(defaultSorting);
     const [updatingTodoId, setUpdatingTodoId] = useState(null);
     const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
+    const prevTodoList = useRef(todoList);
+
+    useEffect(() => {
+        prevTodoList.current = todoList;
+    });
 
     const fetchData = async (params, id = "") => {
         const options = {
@@ -85,9 +61,6 @@ function TodoContainer() {
                     createdTime: record.createdTime,
                 };
             });
-            if (sortOption) {
-                sortList[sortOption](todos);
-            }
             setTodoList(todos);
             setIsLoading(false);
         };
@@ -95,13 +68,49 @@ function TodoContainer() {
     }, []);
 
     useEffect(() => {
-        const todos = [...todoList];
-        if (!todos.length || !sortOption) {
+        const currentTodoList = [...todoList];
+
+        const sortList = {
+            asc(list) {
+                list.sort((objectA, objectB) =>
+                    objectA.title.localeCompare(objectB.title)
+                );
+            },
+            desc(list) {
+                list.sort((objectA, objectB) =>
+                    objectB.title.localeCompare(objectA.title)
+                );
+            },
+            edit(list) {
+                list.sort(
+                    (objectA, objectB) =>
+                        new Date(objectB.edited) - new Date(objectA.edited)
+                );
+            },
+            new(list) {
+                list.sort(
+                    (objectA, objectB) =>
+                        new Date(objectB.createdTime) -
+                        new Date(objectA.createdTime)
+                );
+            },
+            old(list) {
+                list.sort(
+                    (objectA, objectB) =>
+                        new Date(objectA.createdTime) -
+                        new Date(objectB.createdTime)
+                );
+            },
+        };
+        sortList[sortOption](currentTodoList);
+        if (
+            JSON.stringify(currentTodoList) ===
+            JSON.stringify(prevTodoList.current)
+        ) {
             return;
         }
-        sortList[sortOption](todos);
-        setTodoList(todos);
-    }, [sortOption, todoList.length]);
+        setTodoList(currentTodoList);
+    }, [sortOption, todoList]);
 
     const addTodo = async (title) => {
         if (!title) {
@@ -170,13 +179,10 @@ function TodoContainer() {
         const editedTodoList = todoList.map((todo) => {
             return todo.id === updatingTodoId ? editedTodo : todo;
         });
-        if (sortOption) {
-            sortList[sortOption](editedTodoList);
-        }
         setTodoList(editedTodoList);
     }
 
-    function sortTodoList(option) {
+    function sortTodoList(option = defaultSorting) {
         setSortOption(option);
     }
 
