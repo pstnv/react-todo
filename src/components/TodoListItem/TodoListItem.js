@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import style from "./TodoListItem.module.css";
+import Button from "../Button/Button";
 
 function TodoListItem({
     id,
@@ -11,30 +12,28 @@ function TodoListItem({
     onCompleteTodo,
 }) {
     const [value, setValue] = useState(completed);
-    const onBtnClick = (e, callback, ...params) => {
-        e.stopPropagation();
-        callback(...params);
-    };
     const handleChange = () => {
         setValue(!value);
-        onCompleteTodo(id)
-    }
+        onCompleteTodo(id);
+    };
     return (
         <li className={style.ListItem} onDoubleClick={handleChange}>
             <input type="checkbox" checked={value} onChange={handleChange} />
             {title}
-            <button
-                onClick={(e) => onBtnClick(e, onEditTodo, id, title)}
-                className={style.button}
+            <Button
+                onClickHandler={onEditTodo}
+                styles={style.button}
+                params={[id, title]}
             >
                 Edit
-            </button>
-            <button
-                onClick={(e) => onBtnClick(e, onRemoveTodo, id)}
-                className={style.button}
+            </Button>
+            <Button
+                onClickHandler={onRemoveTodo}
+                styles={style.button}
+                params={[id]}
             >
                 Remove
-            </button>
+            </Button>
         </li>
     );
 }

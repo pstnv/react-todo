@@ -214,10 +214,9 @@ function TodoContainer() {
             return todo.id === id ? editedTodo : todo;
         });
         setTodoList(editedTodoList);
-        console.log(editedTodo);
     }
 
-    function sortTodoList(option = defaultSorting) {
+    function sortTodoList (option = defaultSorting) {
         setSortOption(option);
     }
 

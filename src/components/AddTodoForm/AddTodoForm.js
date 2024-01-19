@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import style from "./AddTodoForm.module.css";
 import InputWithLabel from "../InputWithLabel/InputWithLabel";
+import Button from "../Button/Button";
 
 function
     AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {
@@ -31,9 +32,12 @@ function
             >
                 Title
             </InputWithLabel>
-            <button type="submit" className={style.btn}>
+            <Button type="submit" className={style.btn}>
                 {!todoTitle && updatingTodoTitle ? "Cancel" : "Save"}
-            </button>
+            </Button>
+            {/* <button type="submit" className={style.btn}>
+                {!todoTitle && updatingTodoTitle ? "Cancel" : "Save"}
+            </button> */}
         </form>
     );
 }
