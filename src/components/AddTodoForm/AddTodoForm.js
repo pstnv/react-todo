@@ -35,9 +35,6 @@ function
             <Button type="submit" className={style.btn}>
                 {!todoTitle && updatingTodoTitle ? "Cancel" : "Save"}
             </Button>
-            {/* <button type="submit" className={style.btn}>
-                {!todoTitle && updatingTodoTitle ? "Cancel" : "Save"}
-            </button> */}
         </form>
     );
 }

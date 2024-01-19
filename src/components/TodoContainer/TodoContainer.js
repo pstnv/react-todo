@@ -125,7 +125,6 @@ function TodoContainer() {
         const todo = {
             fields: {
                 title,
-                completed: false,
                 edited: new Date().toISOString(),
             },
         };
@@ -137,11 +136,12 @@ function TodoContainer() {
         const newTodo = {
             id: data.id,
             title: data.fields.title,
-            completed: data.fields.completed,
+            completed: data.fields.completed ?? false,
             edited: data.fields.edited,
             createdTime: data.createdTime,
         };        
         setTodoList([...todoList, newTodo]);
+        console.log(todoList)
     };
 
     async function removeTodo(id) {
