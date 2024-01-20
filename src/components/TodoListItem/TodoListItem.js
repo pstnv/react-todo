@@ -18,7 +18,7 @@ function TodoListItem({
     };
     return (
         <li className={style.ListItem} onDoubleClick={handleChange}>
-            <input type="checkbox" checked={value} onChange={handleChange} />
+            <input type="checkbox" name={id} checked={value} onChange={handleChange} />
             {title}
             <Button
                 onClickHandler={onEditTodo}
