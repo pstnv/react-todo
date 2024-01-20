@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import style from "./TodoContainer.module.css";
 import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
 import SortOptionsList from "../SortOptionsList/SortOptionsList";
+const TODOLIST_KEY = "savedTodoList";
 const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
 const tokenAPI = process.env.REACT_APP_AIRTABLE_API_TOKEN;
 const sortOptions = [
@@ -17,6 +18,7 @@ const defaultSorting = "edit";
 function TodoContainer() {
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
     const [sortOption, setSortOption] = useState(defaultSorting);
     const [updatingTodoId, setUpdatingTodoId] = useState(null);
     const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
@@ -25,6 +27,13 @@ function TodoContainer() {
     useEffect(() => {
         prevTodoList.current = todoList;
     });
+
+    useEffect(() => {
+        if (isError) {
+            const todoListJSON = JSON.stringify(todoList);
+            localStorage.setItem(TODOLIST_KEY, todoListJSON);
+        }
+    }, [isError, todoList]);
 
     const fetchData = async (params, id = "") => {
         const options = {
@@ -41,37 +50,77 @@ function TodoContainer() {
                 throw new Error(`Error: ${response.status}`);
             }
             const data = await response.json();
+            setIsError(false);
             return data;
         } catch (error) {
-            console.log(error);
+            setIsError(true);
+            console.log(error.message);
         }
     };
-
-    useEffect(() => {
-        const fetchTodos = async () => {
-            const params = {
-                method: "GET",
-            };
-            const data = await fetchData(params);
-            const todos = data.records.map((record) => {
-                const {
-                    fields: { title, edited, completed },
-                    id,
-                    createdTime,
-                } = record;
-                return {
-                    id,
-                    title,
-                    edited: edited || createdTime,
-                    completed: completed ?? false,
-                    createdTime,
-                };
-            });
+    const fetchTodos = useCallback(async () => {
+        const params = {
+            method: "GET",
+        };
+        const data = await fetchData(params);
+        if (!data) {
+            const todos = JSON.parse(localStorage.getItem(TODOLIST_KEY)) || [];
             setTodoList(todos);
             setIsLoading(false);
-        };
-        fetchTodos();
+            return;
+        }
+        const todos = data.records.map((record) => {
+            const {
+                fields: { title, edited, completed },
+                id,
+                createdTime,
+            } = record;
+            return {
+                id,
+                title,
+                edited: edited || createdTime,
+                completed: completed ?? false,
+                createdTime,
+            };
+        });
+        setTodoList(todos);
+        setIsLoading(false);
     }, []);
+
+    useEffect(() => {
+        fetchTodos();
+    }, [fetchTodos]);
+
+    useEffect(() => {
+        if (!isError) {
+            const todos = JSON.parse(localStorage.getItem(TODOLIST_KEY)) || [];
+            if (todos.length === 0) {
+                return;
+            }
+            const data = todos.reduce(
+                (acc, todo) => {
+                    const { title, completed, edited } = todo;
+                    const newTodo = {
+                        fields: {
+                            title,
+                            completed,
+                            edited,
+                        },
+                    };
+                    acc.records.push(newTodo);
+                    return acc;
+                },
+                { records: [] }
+            );
+            const params = {
+                method: "POST",
+                body: JSON.stringify(data),
+            };
+            fetchData(params);
+            const todoListJSON = JSON.stringify([]);
+            localStorage.setItem(TODOLIST_KEY, todoListJSON);
+            fetchTodos();
+        }
+    }, [isError, fetchTodos]);
 
     useEffect(() => {
         const currentTodoList = [...todoList];
@@ -133,15 +182,25 @@ function TodoContainer() {
             body: JSON.stringify(todo),
         };
         const data = await fetchData(params);
-        const newTodo = {
-            id: data.id,
-            title: data.fields.title,
-            completed: data.fields.completed ?? false,
-            edited: data.fields.edited,
-            createdTime: data.createdTime,
-        };        
+        let newTodo = {};
+        if (!data) {
+            newTodo = {
+                id: Date.now().toString(),
+                title,
+                completed: false,
+                edited: new Date().toISOString(),
+                createdTime: new Date().toISOString(),
+            };
+        } else {
+            newTodo = {
+                id: data.id,
+                title: data.fields.title,
+                completed: data.fields.completed ?? false,
+                edited: data.fields.edited,
+                createdTime: data.createdTime,
+            };
+        }
         setTodoList([...todoList, newTodo]);
-        console.log(todoList)
     };
 
     async function removeTodo(id) {
@@ -162,9 +221,9 @@ function TodoContainer() {
     }
 
     async function updateTodo(title) {
-        setUpdatingTodoId(null);
-        setUpdatingTodoTitle("");
         if (!title) {
+            setUpdatingTodoId(null);
+            setUpdatingTodoTitle("");
             return;
         }
         const sentTodo = {
@@ -178,24 +237,38 @@ function TodoContainer() {
             body: JSON.stringify(sentTodo),
         };
         const data = await fetchData(params, updatingTodoId);
-        const editedTodo = {
-            id: data.id,
-            title: data.fields.title,
-            completed: data.fields.completed,
-            edited: data.fields.edited,
-            createdTime: data.createdTime,
-        };
+        let editedTodo = {};
+        if (!data) {
+            const prevTodo = todoList.find(
+                (todo) => todo.id === updatingTodoId
+            );
+            editedTodo = {
+                ...prevTodo,
+                title,
+                edited: sentTodo.fields.edited,
+            };
+        } else {
+            editedTodo = {
+                id: data.id,
+                title: data.fields.title,
+                completed: data.fields.completed,
+                edited: data.fields.edited,
+                createdTime: data.createdTime,
+            };
+        }
         const editedTodoList = todoList.map((todo) => {
             return todo.id === updatingTodoId ? editedTodo : todo;
         });
         setTodoList(editedTodoList);
+        setUpdatingTodoId(null);
+        setUpdatingTodoTitle("");
     }
 
     async function completeTodo(id) {
-        const todo = todoList.find(item => item.id === id);
+        const todo = todoList.find((item) => item.id === id);
         const sentTodo = {
             fields: {
-                completed: !todo.completed
+                completed: !todo.completed,
             },
         };
         const params = {
@@ -203,20 +276,28 @@ function TodoContainer() {
             body: JSON.stringify(sentTodo),
         };
         const data = await fetchData(params, id);
-        const editedTodo = {
-            id: data.id,
-            title: data.fields.title,
-            completed: data.fields.completed,
-            edited: data.fields.edited,
-            createdTime: data.createdTime,
-        };
+        let editedTodo = {};
+        if (!data) {
+            editedTodo = {
+                ...todo,
+                completed: !todo.completed,
+            };
+        } else {
+            editedTodo = {
+                id: data.id,
+                title: data.fields.title,
+                completed: data.fields.completed,
+                edited: data.fields.edited,
+                createdTime: data.createdTime,
+            };
+        }
         const editedTodoList = todoList.map((todo) => {
             return todo.id === id ? editedTodo : todo;
         });
         setTodoList(editedTodoList);
     }
 
-    function sortTodoList (option = defaultSorting) {
+    function sortTodoList(option = defaultSorting) {
         setSortOption(option);
     }
 
@@ -234,14 +315,15 @@ function TodoContainer() {
                     onSortTodoList={sortTodoList}
                 />
             )}
+            {isError && <p>You're working with local version.</p>}
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>
             ) : (
                 <TodoList
                     todoList={todoList}
                     onRemoveTodo={removeTodo}
-                        onEditTodo={editTodo}
-                        onCompleteTodo={completeTodo}
+                    onEditTodo={editTodo}
+                    onCompleteTodo={completeTodo}
                 />
             )}
         </div>
