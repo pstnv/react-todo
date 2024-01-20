@@ -4,6 +4,7 @@ import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
 import SortOptionsList from "../SortOptionsList/SortOptionsList";
 const TODOLIST_KEY = "savedTodoList";
+const SORT_KEY = "defaultSorting";
 const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
 const tokenAPI = process.env.REACT_APP_AIRTABLE_API_TOKEN;
 const sortOptions = [
@@ -13,7 +14,7 @@ const sortOptions = [
     { name: "A to Z", option: "asc" },
     { name: "Z to A", option: "desc" },
 ];
-const defaultSorting = "edit";
+const defaultSorting = JSON.parse(localStorage.getItem(SORT_KEY)) || "edit";
 
 function TodoContainer() {
     const [todoList, setTodoList] = useState([]);
@@ -201,6 +202,7 @@ function TodoContainer() {
             };
         }
         setTodoList([...todoList, newTodo]);
+        console.log(todoList);
     };
 
     async function removeTodo(id) {
@@ -299,6 +301,7 @@ function TodoContainer() {
 
     function sortTodoList(option = defaultSorting) {
         setSortOption(option);
+        localStorage.setItem(SORT_KEY, JSON.stringify(option));
     }
 
     return (
