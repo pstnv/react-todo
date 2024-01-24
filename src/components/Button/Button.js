@@ -2,7 +2,7 @@ function Button({
     children,
     onClickHandler,
     params = [],
-    styles,
+    styles={},
     type = "button",
 }) {
     const onBtnClick = (params) => (event) => {

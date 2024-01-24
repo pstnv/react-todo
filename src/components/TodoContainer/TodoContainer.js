@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useLocation } from "react-router-dom";
+import fetchData from "../../utils/fetchData";
 import style from "./TodoContainer.module.css";
+import options from "../../utils/options";
 import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
 import SortOptionsList from "../SortOptionsList/SortOptionsList";
-const TODOLIST_KEY = "savedTodoList";
 const SORT_KEY = "defaultSorting";
-const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
-const tokenAPI = process.env.REACT_APP_AIRTABLE_API_TOKEN;
+
 const sortOptions = [
     { name: "Newest", option: "new" },
     { name: "Oldest", option: "old" },
@@ -14,12 +15,15 @@ const sortOptions = [
     { name: "A to Z", option: "asc" },
     { name: "Z to A", option: "desc" },
 ];
-const defaultSorting = JSON.parse(localStorage.getItem(SORT_KEY)) || "edit";
 
 function TodoContainer() {
+    const { name: REACT_APP_TABLE_NAME } = useLocation().state;
+const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${REACT_APP_TABLE_NAME}`;
+
+    const defaultSorting = JSON.parse(localStorage.getItem(SORT_KEY)) || "edit";   
+    
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [isError, setIsError] = useState(false);
     const [sortOption, setSortOption] = useState(defaultSorting);
     const [updatingTodoId, setUpdatingTodoId] = useState(null);
     const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
@@ -29,44 +33,9 @@ function TodoContainer() {
         prevTodoList.current = todoList;
     });
 
-    useEffect(() => {
-        if (isError) {
-            const todoListJSON = JSON.stringify(todoList);
-            localStorage.setItem(TODOLIST_KEY, todoListJSON);
-        }
-    }, [isError, todoList]);
-
-    const fetchData = async (params, id = "") => {
-        const options = {
-            ...params,
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${tokenAPI}`,
-            },
-        };
-        const url = `${urlAPI}/${id}`;
-        try {
-            const response = await fetch(url, options);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
-            }
-            const data = await response.json();
-            setIsError(false);
-            return data;
-        } catch (error) {
-            setIsError(true);
-            console.log(error.message);
-        }
-    };
     const fetchTodos = useCallback(async () => {
-        const params = {
-            method: "GET",
-        };
-        const data = await fetchData(params);
+        const data = await fetchData(urlAPI, options.get);
         if (!data) {
-            const todos = JSON.parse(localStorage.getItem(TODOLIST_KEY)) || [];
-            setTodoList(todos);
-            setIsLoading(false);
             return;
         }
         const todos = data.records.map((record) => {
@@ -85,43 +54,11 @@ function TodoContainer() {
         });
         setTodoList(todos);
         setIsLoading(false);
-    }, []);
+    }, [urlAPI]);
 
     useEffect(() => {
         fetchTodos();
     }, [fetchTodos]);
-
-    useEffect(() => {
-        if (!isError) {
-            const todos = JSON.parse(localStorage.getItem(TODOLIST_KEY)) || [];
-            if (todos.length === 0) {
-                return;
-            }
-            const data = todos.reduce(
-                (acc, todo) => {
-                    const { title, completed, edited } = todo;
-                    const newTodo = {
-                        fields: {
-                            title,
-                            completed,
-                            edited,
-                        },
-                    };
-                    acc.records.push(newTodo);
-                    return acc;
-                },
-                { records: [] }
-            );
-            const params = {
-                method: "POST",
-                body: JSON.stringify(data),
-            };
-            fetchData(params);
-            const todoListJSON = JSON.stringify([]);
-            localStorage.setItem(TODOLIST_KEY, todoListJSON);
-            fetchTodos();
-        }
-    }, [isError, fetchTodos]);
 
     useEffect(() => {
         const currentTodoList = [...todoList];
@@ -178,11 +115,7 @@ function TodoContainer() {
                 edited: new Date().toISOString(),
             },
         };
-        const params = {
-            method: "POST",
-            body: JSON.stringify(todo),
-        };
-        const data = await fetchData(params);
+        const data = await fetchData(urlAPI, options.post(todo));
         let newTodo = {};
         if (!data) {
             newTodo = {
@@ -202,7 +135,6 @@ function TodoContainer() {
             };
         }
         setTodoList([...todoList, newTodo]);
-        console.log(todoList);
     };
 
     async function removeTodo(id) {
@@ -210,10 +142,7 @@ function TodoContainer() {
             setUpdatingTodoId(null);
             setUpdatingTodoTitle("");
         }
-        const params = {
-            method: "DELETE",
-        };
-        fetchData(params, id);
+        fetchData(urlAPI, options.delete, id);
         setTodoList(todoList.filter((todo) => todo.id !== id));
     }
 
@@ -234,11 +163,11 @@ function TodoContainer() {
                 edited: new Date().toISOString(),
             },
         };
-        const params = {
-            method: "PATCH",
-            body: JSON.stringify(sentTodo),
-        };
-        const data = await fetchData(params, updatingTodoId);
+        const data = await fetchData(
+            urlAPI,
+            options.patch(sentTodo),
+            updatingTodoId
+        );
         let editedTodo = {};
         if (!data) {
             const prevTodo = todoList.find(
@@ -273,11 +202,7 @@ function TodoContainer() {
                 completed: !todo.completed,
             },
         };
-        const params = {
-            method: "PATCH",
-            body: JSON.stringify(sentTodo),
-        };
-        const data = await fetchData(params, id);
+        const data = await fetchData(urlAPI, options.patch(sentTodo), id);
         let editedTodo = {};
         if (!data) {
             editedTodo = {
@@ -318,7 +243,6 @@ function TodoContainer() {
                     onSortTodoList={sortTodoList}
                 />
             )}
-            {isError && <p>You're working with local version.</p>}
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>
             ) : (
