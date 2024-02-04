@@ -23,12 +23,6 @@ function TodoListItem({
             className={`${style.listItem} ${value && style.completed}`}
             onClick={handleChange}
         >
-            <input
-                type="checkbox"
-                name={id}
-                checked={value}
-                onChange={handleChange}
-            />
             <span>{title}</span>
             <Button
                 onClickHandler={onEditTodo}
