@@ -152,9 +152,9 @@ function TodoContainer() {
     }
 
     async function updateTodo(title) {
+        setUpdatingTodoTitle("");
         if (!title) {
             setUpdatingTodoId(null);
-            setUpdatingTodoTitle("");
             return;
         }
         const sentTodo = {
@@ -192,7 +192,6 @@ function TodoContainer() {
         });
         setTodoList(editedTodoList);
         setUpdatingTodoId(null);
-        setUpdatingTodoTitle("");
     }
 
     async function completeTodo(id) {
