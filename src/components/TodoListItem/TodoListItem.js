@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import style from "./TodoListItem.module.css";
 import Button from "../Button/Button";
+import iconEdit from "../../assets/icons/editItem.png";
+import iconDelete from "../../assets/icons/deleteItem.png";
 
 function TodoListItem({
     id,
@@ -17,22 +19,30 @@ function TodoListItem({
         onCompleteTodo(id);
     };
     return (
-        <li className={style.ListItem} onDoubleClick={handleChange}>
-            <input type="checkbox" name={id} checked={value} onChange={handleChange} />
-            {title}
+        <li
+            className={`${style.listItem} ${value && style.completed}`}
+            onClick={handleChange}
+        >
+            <input
+                type="checkbox"
+                name={id}
+                checked={value}
+                onChange={handleChange}
+            />
+            <span>{title}</span>
             <Button
                 onClickHandler={onEditTodo}
-                styles={style.button}
+                styles={`${style.button} ${value && style.completed}`}
                 params={[id, title]}
             >
-                Edit
+                <img src={iconEdit} alt="edit todo" />
             </Button>
             <Button
                 onClickHandler={onRemoveTodo}
                 styles={style.button}
                 params={[id]}
             >
-                Remove
+                <img src={iconDelete} alt="edit todo" />
             </Button>
         </li>
     );

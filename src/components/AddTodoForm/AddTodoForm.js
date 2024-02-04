@@ -1,9 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import style from "./AddTodoForm.module.css";
 import InputWithLabel from "../InputWithLabel/InputWithLabel";
 import Button from "../Button/Button";
+import style from "./AddTodoForm.module.css";
 
 function
     AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {
@@ -29,11 +29,9 @@ function
                 id="todoTitle"
                 todoTitle={todoTitle}
                 handleTitleChange={handleTitleChange}
-            >
-                Title
-            </InputWithLabel>
-            <Button type="submit" className={style.btn}>
-                {!todoTitle && updatingTodoTitle ? "Cancel" : "Save"}
+            />
+            <Button type="submit" styles={style.btn}>
+                {!todoTitle && updatingTodoTitle ? "Cancel" : "Ok"}
             </Button>
         </form>
     );

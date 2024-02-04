@@ -17,11 +17,11 @@ const sortOptions = [
 ];
 
 function TodoContainer() {
-    const { name: REACT_APP_TABLE_NAME } = useLocation().state;
-const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${REACT_APP_TABLE_NAME}`;
+    const { name: tableName } = useLocation().state;
+    const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${tableName}`;
 
-    const defaultSorting = JSON.parse(localStorage.getItem(SORT_KEY)) || "edit";   
-    
+    const defaultSorting = JSON.parse(localStorage.getItem(SORT_KEY)) || "edit";
+
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [sortOption, setSortOption] = useState(defaultSorting);
@@ -231,7 +231,7 @@ const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BAS
 
     return (
         <div className={style.container}>
-            <h1 className={style.header}>Todo List</h1>
+            <h1 className={style.header}>{tableName} </h1>
             <AddTodoForm
                 onAddTodo={addTodo}
                 updatingTodoTitle={updatingTodoTitle}
