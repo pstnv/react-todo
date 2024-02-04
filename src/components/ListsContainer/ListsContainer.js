@@ -86,6 +86,11 @@ function ListsContainer() {
         const data = await fetchData(listURL, options.get);
         const todoList = data.records;
 
+        if (!todoList.length) {
+            await hideList();
+            return;
+        }
+
         Promise.all(
             todoList.map((todo) => fetchData(listURL, options.delete, todo.id))
         ).then(() => hideList());
