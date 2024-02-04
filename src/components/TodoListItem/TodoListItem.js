@@ -36,7 +36,7 @@ function TodoListItem({
                 styles={style.button}
                 params={[id]}
             >
-                <img src={iconDelete} alt="edit todo" />
+                <img src={iconDelete} alt="remove todo" />
             </Button>
         </li>
     );
