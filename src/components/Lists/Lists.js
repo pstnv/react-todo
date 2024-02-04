@@ -1,8 +1,9 @@
 import ListsItem from "../ListsItem/ListsItem";
+import style from './Lists.module.css';
 
 function Lists({ lists, onRenameList, onDeleteList }) {
     return (
-        <ul>
+        <ul className={style.list}>
             {lists.map((list) => (
                 <ListsItem
                     key={list.id}

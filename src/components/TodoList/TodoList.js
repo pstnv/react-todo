@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import style from "./TodoList.module.css";
 import TodoListItem from "../TodoListItem/TodoListItem";
+import style from "./TodoList.module.css";
 
 function TodoList({ todoList, onEditTodo, onRemoveTodo, onCompleteTodo }) {
     return (

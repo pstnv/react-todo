@@ -1,9 +1,11 @@
+import style from './Header.module.css';
+
 function Header() {
     return (
-        <div style={{ display: "flex", justifyContent: "space-between" ,alignItems: "center", padding: "20px"}}>
+        <header className={style.header}>
+            <span className={style.grey}>Your</span>
             <span>Notes</span>
-            <span>Color</span>
-        </div>
+        </header>
     )
 }
 

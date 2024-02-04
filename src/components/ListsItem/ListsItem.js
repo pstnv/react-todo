@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import style from './ListsItem.module.css';
 
 function ListsItem({ id, name, onRenameList, onDeleteList }) {
     const onClickHandler = () => {
@@ -9,7 +10,7 @@ function ListsItem({ id, name, onRenameList, onDeleteList }) {
         onRenameList(id, newTitle);
     };
     return (
-        <li>
+        <li className={style.listItem}>
             <Link to={`/list/${id}`} state={{ id, name }}>
                 {name}
             </Link>

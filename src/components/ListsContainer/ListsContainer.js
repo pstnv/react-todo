@@ -5,6 +5,7 @@ import createTableTemplate from "../../utils/createTableTemplate";
 import Button from "../Button/Button";
 import Header from "../Header/Header";
 import Lists from "../Lists/Lists";
+import style from './ListsContainer.module.css';
 
 const urlTablesAPI = `https://api.airtable.com/v0/meta/bases/${process.env.REACT_APP_AIRTABLE_BASE_ID}/tables`;
 const urlSingleBaseAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}`;
@@ -111,10 +112,10 @@ function ListsContainer() {
     }
 
     return (
-        <div>
+        <div className={style.container}>
             <Header />
             {isLoading ? (
-                <p>Loading...</p>
+                <p className={style.loading}>Loading...</p>
             ) : (
                 <Lists
                     lists={lists}
