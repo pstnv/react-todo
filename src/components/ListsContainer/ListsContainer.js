@@ -5,7 +5,7 @@ import createTableTemplate from "../../utils/createTableTemplate";
 import Header from "../Header/Header";
 import Lists from "../Lists/Lists";
 import style from "./ListsContainer.module.css";
-import Footer from "../Footer/Footer";
+import ListsFooter from "../ListsFooter/ListsFooter";
 
 const urlTablesAPI = `https://api.airtable.com/v0/meta/bases/${process.env.REACT_APP_AIRTABLE_BASE_ID}/tables`;
 const urlSingleBaseAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}`;
@@ -121,13 +121,15 @@ function ListsContainer() {
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>
             ) : (
-                <Lists
-                    lists={lists}
-                    onRenameList={renameList}
-                    onDeleteList={deleteList}
-                />
+                <>
+                    <Lists
+                        lists={lists}
+                        onRenameList={renameList}
+                        onDeleteList={deleteList}
+                    />
+                    <ListsFooter addList={addList} />
+                </>
             )}
-            <Footer addList={addList} />
         </div>
     );
 }
