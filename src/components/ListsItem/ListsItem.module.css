@@ -36,3 +36,22 @@
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
 }
+
+@media all and (max-width: 600px) {
+    .listItem {
+        margin: 5px 0;
+        padding: 15px 10px;
+        border-left: 6px solid rgb(254, 220, 8);
+        font-size: 20px;
+        line-height: 1.2;
+    }
+    .button {
+        margin-left: 5px;
+        min-width: 25px;
+        min-height: 25px;
+    }
+    .button img {
+        width: 80%;
+        height: 80%;
+    }
+}
