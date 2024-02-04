@@ -14,7 +14,7 @@ function ListsItem({ id, name, onRenameList, onDeleteList }) {
     };
     return (
         <li className={style.listItem}>
-            <Link to={`/list/${id}`} state={{ id, name }}>
+            <Link to={`/list/${id}`} state={{ id, name }} className={style.link}>
                 {name}
             </Link>
             <Button styles={style.button} onClickHandler={onClickEditHandler}>
