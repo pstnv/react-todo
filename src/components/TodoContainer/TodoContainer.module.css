@@ -3,7 +3,6 @@
     flex-direction: column;
     align-items: stretch;
 }
-
 .header {
     margin: 0;
     padding: 15px;
@@ -12,15 +11,19 @@
     font-size: 30px;
     font-weight: 600;
 }
-
-
 .loading {
+    padding: 15px;
     text-align: center;
     font-size: 26px;
 }
 
-/* @media all and (max-width: 800px) {
-    .container {
-        padding: 20px;
+@media all and (max-width: 600px) {
+    .header {
+        padding: 10px;
+        font-size: 24px;
     }
-} */
+    .loading {
+        padding: 10px;
+        font-size: 22px;
+    }
+}

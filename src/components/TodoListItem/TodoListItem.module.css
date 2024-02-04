@@ -8,16 +8,13 @@
     align-items: flex-start;
     word-break: break-word;
 }
-
 .listItem span {
     margin-right: 10px;
 }
-
 .listItem.completed {
     text-decoration: line-through;
-    color: rgba(72,66,54, .6);
+    color: rgba(72, 66, 54, 0.6);
 }
-
 .button {
     margin-left: 10px;
     padding: 0;
@@ -25,17 +22,13 @@
     min-height: 30px;
     background-color: transparent;
     border: none;
-    /* border: 2px solid blue; */
     position: relative;
     cursor: pointer;
 }
-
 .button:first-of-type {
     margin-left: auto;
 }
-
 .button img {
-    /* border: 1px solid red; */
     width: 90%;
     height: 90%;
     position: absolute;
@@ -43,7 +36,23 @@
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
 }
-
 .button.completed {
     visibility: hidden;
+}
+
+@media all and (max-width: 600px) {
+    .listItem {
+        padding: 15px 10px;
+        font-size: 18px;
+        line-height: 1.2;
+    }
+    .button {
+        margin-left: 5px;
+        min-width: 25px;
+        min-height: 25px;
+    }
+    .button img {
+        width: 80%;
+        height: 80%;
+    }
 }
