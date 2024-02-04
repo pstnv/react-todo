@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import fetchData from "../../utils/fetchData";
 import options from "../../utils/options";
 import createTableTemplate from "../../utils/createTableTemplate";
-import Button from "../Button/Button";
 import Header from "../Header/Header";
 import Lists from "../Lists/Lists";
-import style from './ListsContainer.module.css';
+import style from "./ListsContainer.module.css";
+import Footer from "../Footer/Footer";
 
 const urlTablesAPI = `https://api.airtable.com/v0/meta/bases/${process.env.REACT_APP_AIRTABLE_BASE_ID}/tables`;
 const urlSingleBaseAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}`;
@@ -34,7 +34,7 @@ function ListsContainer() {
         }
         showLists();
     }, []);
-    
+
     useEffect(() => {
         const activeLists = lists.filter(
             (list) => list.name !== list.id && list.description !== "deleted"
@@ -43,7 +43,7 @@ function ListsContainer() {
             return;
         }
         setLists(activeLists);
-    }, [lists])
+    }, [lists]);
 
     async function addList() {
         const tableName = prompt("Enter new list name.");
@@ -82,7 +82,6 @@ function ListsContainer() {
     }
 
     async function deleteList(id, name) {
-
         const listURL = `${urlSingleBaseAPI}/${name}`;
         const data = await fetchData(listURL, options.get);
         const todoList = data.records;
@@ -90,7 +89,7 @@ function ListsContainer() {
         Promise.all(
             todoList.map((todo) => fetchData(listURL, options.delete, todo.id))
         ).then(() => hideList());
-        
+
         async function hideList() {
             const editedList = {
                 name: id,
@@ -123,7 +122,7 @@ function ListsContainer() {
                     onDeleteList={deleteList}
                 />
             )}
-            <Button onClickHandler={addList}>Create list</Button>
+            <Footer addList={addList} />
         </div>
     );
 }
