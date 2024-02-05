@@ -117,24 +117,17 @@ function TodoContainer() {
             },
         };
         const data = await fetchData(urlAPI, options.post(todo));
-        let newTodo = {};
         if (!data) {
-            newTodo = {
-                id: Date.now().toString(),
-                title,
-                completed: false,
-                edited: new Date().toISOString(),
-                createdTime: new Date().toISOString(),
-            };
-        } else {
-            newTodo = {
-                id: data.id,
-                title: data.fields.title,
-                completed: data.fields.completed ?? false,
-                edited: data.fields.edited,
-                createdTime: data.createdTime,
-            };
+            setIsLoading(true);
+            return;
         }
+        const newTodo = {
+            id: data.id,
+            title: data.fields.title,
+            completed: data.fields.completed ?? false,
+            edited: data.fields.edited,
+            createdTime: data.createdTime,
+        };
         setTodoList([...todoList, newTodo]);
     };
 
@@ -143,7 +136,11 @@ function TodoContainer() {
             setUpdatingTodoId(null);
             setUpdatingTodoTitle("");
         }
-        fetchData(urlAPI, options.delete, id);
+        const res = await fetchData(urlAPI, options.delete, id);
+        if (!res) {
+            setIsLoading(true);
+            return;
+        }
         setTodoList(todoList.filter((todo) => todo.id !== id));
     }
 
@@ -169,25 +166,17 @@ function TodoContainer() {
             options.patch(sentTodo),
             updatingTodoId
         );
-        let editedTodo = {};
         if (!data) {
-            const prevTodo = todoList.find(
-                (todo) => todo.id === updatingTodoId
-            );
-            editedTodo = {
-                ...prevTodo,
-                title,
-                edited: sentTodo.fields.edited,
-            };
-        } else {
-            editedTodo = {
-                id: data.id,
-                title: data.fields.title,
-                completed: data.fields.completed,
-                edited: data.fields.edited,
-                createdTime: data.createdTime,
-            };
+            setIsLoading(true);
+            return;
         }
+        const editedTodo = {
+            id: data.id,
+            title: data.fields.title,
+            completed: data.fields.completed,
+            edited: data.fields.edited,
+            createdTime: data.createdTime,
+        };
         const editedTodoList = todoList.map((todo) => {
             return todo.id === updatingTodoId ? editedTodo : todo;
         });
@@ -203,21 +192,17 @@ function TodoContainer() {
             },
         };
         const data = await fetchData(urlAPI, options.patch(sentTodo), id);
-        let editedTodo = {};
         if (!data) {
-            editedTodo = {
-                ...todo,
-                completed: !todo.completed,
-            };
-        } else {
-            editedTodo = {
-                id: data.id,
-                title: data.fields.title,
-                completed: data.fields.completed,
-                edited: data.fields.edited,
-                createdTime: data.createdTime,
-            };
+            setIsLoading(true);
+            return;
         }
+        const editedTodo = {
+            id: data.id,
+            title: data.fields.title,
+            completed: data.fields.completed,
+            edited: data.fields.edited,
+            createdTime: data.createdTime,
+        };
         const editedTodoList = todoList.map((todo) => {
             return todo.id === id ? editedTodo : todo;
         });
