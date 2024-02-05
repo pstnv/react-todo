@@ -6,6 +6,7 @@ import options from "../../utils/options";
 import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
 import SortOptionsList from "../SortOptionsList/SortOptionsList";
+import TodoFooter from "../TodoFooter/TodoFooter";
 const SORT_KEY = "defaultSorting";
 
 const sortOptions = [
@@ -245,12 +246,15 @@ function TodoContainer() {
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>
             ) : (
-                <TodoList
-                    todoList={todoList}
-                    onRemoveTodo={removeTodo}
-                    onEditTodo={editTodo}
-                    onCompleteTodo={completeTodo}
-                />
+                <>
+                    <TodoList
+                        todoList={todoList}
+                        onRemoveTodo={removeTodo}
+                        onEditTodo={editTodo}
+                        onCompleteTodo={completeTodo}
+                    />
+                    <TodoFooter />
+                </>
             )}
         </div>
     );

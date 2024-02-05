@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import style from "./TodoListItem.module.css";
 import Button from "../Button/Button";
-import iconEdit from "../../assets/icons/editItem.png";
+import iconEdit from "../../assets/icons/edit.png";
 import iconDelete from "../../assets/icons/deleteItem.png";
 
 function TodoListItem({

@@ -30,6 +30,7 @@
     left: 50%;
     bottom: 0px;
     transform: translateX(-50%);
+    display: inline-block;
 }
 .button img {
     width: var(--button-image-size);
@@ -40,7 +41,7 @@
     transform: translate3d(-50%, -50%, 0);
 }
 
-@media all and (max-width: 600px) {
+/* @media all and (max-width: 600px) {
     :root {
         --button-size: 70px;
     }
@@ -55,4 +56,4 @@
         width: 80%;
         height: 80%;
     }
-}
+} */
