@@ -22,6 +22,9 @@ function ListsContainer() {
     useEffect(() => {
         async function showLists() {
             const data = await fetchData(urlTablesAPI, options.get);
+            if (!data) {
+                return;
+            }
             const tables = data.tables.map(({ id, name, description }) => {
                 return {
                     id,
@@ -53,6 +56,7 @@ function ListsContainer() {
         const tableTemplate = createTableTemplate(tableName);
         const data = await fetchData(urlTablesAPI, options.post(tableTemplate));
         if (!data) {
+            setIsLoading(true);
             return;
         }
         const newList = {
@@ -73,6 +77,7 @@ function ListsContainer() {
             id
         );
         if (!data) {
+            setIsLoading(true);
             return;
         }
         const updatedLists = lists.map((list) => {
@@ -84,8 +89,11 @@ function ListsContainer() {
     async function deleteList(id, name) {
         const listURL = `${urlSingleBaseAPI}/${name}`;
         const data = await fetchData(listURL, options.get);
+        if (!data) {
+            setIsLoading(true);
+            return;
+        }
         const todoList = data.records;
-
         if (!todoList.length) {
             await hideList();
             return;
@@ -106,6 +114,7 @@ function ListsContainer() {
                 id
             );
             if (!data) {
+                setIsLoading(true);
                 return;
             }
             const newLists = lists.map((list) => {
