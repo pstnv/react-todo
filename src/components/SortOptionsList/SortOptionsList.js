@@ -1,17 +1,19 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import Button from "../Button/Button";
 import style from "./SortOptionsList.module.css";
+import { useEffect } from "react";
 
-function SortOptionsList({ sortOptions, onSortTodoList }) {
+function SortOptionsList({ sortOptions, selectedSorting, onSortTodoList }) {
     return (
         <div className={style.optionsContainer}>
             {sortOptions.map((sortOption) => {
                 const { name, option } = sortOption;
+                const isSelected = option === selectedSorting;
                 return (
                     <Button
                         key={option}
                         params={[option]}
-                        styles={style.btn}
+                        styles={`${style.btn} ${isSelected && style.selected}`}
                         onClickHandler={onSortTodoList}
                     >
                         {name}
@@ -23,10 +25,13 @@ function SortOptionsList({ sortOptions, onSortTodoList }) {
 }
 
 SortOptionsList.propTypes = {
-    sortOptions: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string,
-        option: PropTypes.string
-    })),
+    sortOptions: PropTypes.arrayOf(
+        PropTypes.shape({
+            name: PropTypes.string,
+            option: PropTypes.string,
+        })
+    ),
+    selectedSorting: PropTypes.string,
     onSortTodoList: PropTypes.func.isRequired,
 };
 SortOptionsList.defaultProps = {

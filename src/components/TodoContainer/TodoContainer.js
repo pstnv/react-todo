@@ -226,6 +226,7 @@ function TodoContainer() {
                 <SortOptionsList
                     sortOptions={sortOptions}
                     onSortTodoList={sortTodoList}
+                    selectedSorting={sortOption}
                 />
             )}
             {isLoading ? (
