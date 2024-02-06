@@ -19,7 +19,6 @@ const sortOptions = [
 
 function TodoContainer() {
     const { id, name: tableName } = useLocation().state;
-    console.log('id ', id);
     const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${id}`;
 
     const defaultSorting = JSON.parse(localStorage.getItem(SORT_KEY)) || "edit";
