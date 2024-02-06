@@ -19,8 +19,19 @@ function TodoList({ todoList, onEditTodo, onRemoveTodo, onCompleteTodo }) {
     );
 }
 TodoList.propTypes = {
-    todoList: PropTypes.array.isRequired,
+    todoList: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string,
+            title: PropTypes.string,
+            completed: PropTypes.bool,
+        })
+    ),
+    onEditTodo: PropTypes.func.isRequired,
     onRemoveTodo: PropTypes.func.isRequired,
+    onCompleteTodo: PropTypes.func.isRequired,
+};
+TodoList.defaultProps = {
+    todoList: [],
 };
 
 export default TodoList;

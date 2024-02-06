@@ -1,5 +1,6 @@
+import PropTypes from "prop-types";
 import ListsItem from "../ListsItem/ListsItem";
-import style from './Lists.module.css';
+import style from "./Lists.module.css";
 
 function Lists({ lists, onRenameList, onDeleteList }) {
     return (
@@ -15,5 +16,17 @@ function Lists({ lists, onRenameList, onDeleteList }) {
         </ul>
     );
 }
+
+Lists.PropTypes = {
+    lists: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string,
+            name: PropTypes.string,
+        })
+    ),
+};
+Lists.defaultProps = {
+    lists: [],
+};
 
 export default Lists;

@@ -21,4 +21,12 @@ function SortOptionsList({ sortOptions, onSortTodoList }) {
     );
 }
 
+SortOptionsList.propTypes = {
+    sortOptions: PropTypes.arrayOf(PropTypes.string),
+    onSortTodoList: PropTypes.func.isRequired,
+};
+SortOptionsList.defaultProps = {
+    sortOptions: [],
+};
+
 export default SortOptionsList;

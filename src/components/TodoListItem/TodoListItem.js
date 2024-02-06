@@ -44,6 +44,12 @@ function TodoListItem({
 TodoListItem.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string,
+    completed: PropTypes.bool.isRequired,
+    onEditTodo: PropTypes.func.isRequired,
     onRemoveTodo: PropTypes.func.isRequired,
+    onCompleteTodo: PropTypes.func.isRequired,
+};
+TodoListItem.defaultProps = {
+    title: "",
 };
 export default TodoListItem;

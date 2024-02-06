@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Button from "../Button/Button";
 import iconAddList from "../../assets/icons/add.png";
 import style from "./ListsFooter.module.css";
@@ -11,5 +12,9 @@ function ListsFooter({ addList }) {
         </footer>
     );
 }
+
+ListsFooter.PropTypes = {
+    addList: PropTypes.func.isRequired,
+};
 
 export default ListsFooter;

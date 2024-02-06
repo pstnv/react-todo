@@ -5,8 +5,7 @@ import InputWithLabel from "../InputWithLabel/InputWithLabel";
 import Button from "../Button/Button";
 import style from "./AddTodoForm.module.css";
 
-function
-    AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {
+function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {
     const [todoTitle, setTodoTitle] = useState("");
 
     function handleTitleChange(e) {
@@ -39,6 +38,8 @@ function
 
 AddTodoForm.propTypes = {
     onAddTodo: PropTypes.func.isRequired,
+    updatingTodoTitle: PropTypes.string,
+    onUpdateTodo: PropTypes.func.isRequired,
 };
 
 export default AddTodoForm;
