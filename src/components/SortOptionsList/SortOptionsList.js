@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import Button from "../Button/Button";
 import style from "./SortOptionsList.module.css";
-import { useEffect } from "react";
 
 function SortOptionsList({ sortOptions, selectedSorting, onSortTodoList }) {
     return (
