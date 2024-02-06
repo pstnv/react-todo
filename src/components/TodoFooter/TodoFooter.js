@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import iconReturn from "../../assets/icons/back.png";
 import style from "./TodoFooter.module.css";
 
-function TodoFooter({ addList }) {
+function TodoFooter() {
     return (
         <footer className={style.footer}>
             <Link to="/" className={style.button}>
