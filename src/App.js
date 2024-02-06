@@ -9,6 +9,7 @@ function App() {
             <Routes>
                 <Route element={<ListsContainer />} path="/" />
                 <Route element={<TodoContainer />} path="/list/:id" />
+                <Route element={<ListsContainer />} path="*" />
             </Routes>
         </BrowserRouter>
     );
