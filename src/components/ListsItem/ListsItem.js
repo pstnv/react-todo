@@ -36,7 +36,7 @@ function ListsItem({ id, name, onRenameList, onDeleteList }) {
     );
 }
 
-ListsItem.PropTypes = {
+ListsItem.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     onRenameList: PropTypes.func.isRequired,

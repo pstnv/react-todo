@@ -18,7 +18,7 @@ function Button({ children, onClickHandler, params, styles, type }) {
     );
 }
 
-Button.PropTypes = {
+Button.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.element,
         PropTypes.node,
@@ -27,13 +27,12 @@ Button.PropTypes = {
     ]),
     onClickHandler: PropTypes.func,
     params: PropTypes.array,
-    styles: PropTypes.object,
+    styles: PropTypes.string,
     type: PropTypes.string,
 };
 Button.defaultProps = {
     params: [],
-    styles: {},
+    styles: "",
     type: "button",
 };
-
 export default Button;

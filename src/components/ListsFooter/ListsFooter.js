@@ -13,7 +13,7 @@ function ListsFooter({ addList }) {
     );
 }
 
-ListsFooter.PropTypes = {
+ListsFooter.propTypes = {
     addList: PropTypes.func.isRequired,
 };
 

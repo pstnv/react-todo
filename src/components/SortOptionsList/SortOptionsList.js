@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import Button from "../Button/Button";
 import style from "./SortOptionsList.module.css";
 
@@ -22,7 +23,10 @@ function SortOptionsList({ sortOptions, onSortTodoList }) {
 }
 
 SortOptionsList.propTypes = {
-    sortOptions: PropTypes.arrayOf(PropTypes.string),
+    sortOptions: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string,
+        option: PropTypes.string
+    })),
     onSortTodoList: PropTypes.func.isRequired,
 };
 SortOptionsList.defaultProps = {

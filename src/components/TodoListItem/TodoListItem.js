@@ -51,5 +51,6 @@ TodoListItem.propTypes = {
 };
 TodoListItem.defaultProps = {
     title: "",
+    completed: false
 };
 export default TodoListItem;

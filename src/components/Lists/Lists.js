@@ -17,13 +17,15 @@ function Lists({ lists, onRenameList, onDeleteList }) {
     );
 }
 
-Lists.PropTypes = {
+Lists.propTypes = {
     lists: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string,
             name: PropTypes.string,
         })
     ),
+    onRenameList: PropTypes.func.isRequired,
+    onDeleteList: PropTypes.func.isRequired,
 };
 Lists.defaultProps = {
     lists: [],
