@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import Button from "../Button/Button";
+import Button from "../UI/Button/Button";
 import iconAddList from "../../assets/icons/add.png";
 import style from "./ListsFooter.module.css";
 

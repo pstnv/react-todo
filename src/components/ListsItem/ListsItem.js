@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import Button from "../Button/Button";
+import Button from "../UI/Button/Button";
 import style from "./ListsItem.module.css";
 import iconEdit from "../../assets/icons/edit.png";
 import iconDelete from "../../assets/icons/deleteList.png";

@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import InputWithLabel from "../InputWithLabel/InputWithLabel";
-import Button from "../Button/Button";
+import Button from "../UI/Button/Button";
 import style from "./AddTodoForm.module.css";
 
 function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {

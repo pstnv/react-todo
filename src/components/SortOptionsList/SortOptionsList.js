@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import Button from "../Button/Button";
+import Button from "../UI/Button/Button";
 import style from "./SortOptionsList.module.css";
 
 function SortOptionsList({ sortOptions, selectedSorting, onSortTodoList }) {

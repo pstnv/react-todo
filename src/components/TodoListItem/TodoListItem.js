@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import style from "./TodoListItem.module.css";
-import Button from "../Button/Button";
+import Button from "../UI/Button/Button";
 import iconEdit from "../../assets/icons/edit.png";
 import iconDelete from "../../assets/icons/deleteItem.png";
 
@@ -51,6 +51,6 @@ TodoListItem.propTypes = {
 };
 TodoListItem.defaultProps = {
     title: "",
-    completed: false
+    completed: false,
 };
 export default TodoListItem;
