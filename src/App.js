@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import TodoContainer from "./components/TodoContainer/TodoContainer";
 import ListsContainer from "./components/ListsContainer/ListsContainer";
 
@@ -9,7 +9,8 @@ function App() {
             <Routes>
                 <Route element={<ListsContainer />} path="/" />
                 <Route element={<TodoContainer />} path="/list/:id" />
-                <Route element={<ListsContainer />} path="*" />
+                <Route path="/list/*" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>
     );
