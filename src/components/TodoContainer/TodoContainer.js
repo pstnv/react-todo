@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import fetchData from "../../utils/fetchData";
-import sortList from "../../utils/sortList";
 import style from "./TodoContainer.module.css";
+import useSortedList from "../../customHooks/useSortedList";
 import options from "../../utils/options";
 import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
@@ -57,14 +57,7 @@ function TodoContainer() {
         fetchTodos();
     }, [fetchTodos]);
 
-    const sortedTodoList = useMemo(() => {
-        if (isLoading) {
-            return todoList;
-        }
-        const sortedList = sortList(sortOption, todoList);
-        return sortedList;
-    }, [sortOption, todoList, isLoading]);
-
+    const sortedTodoList = useSortedList(isLoading, todoList, sortOption);
 
     const addTodo = async (title) => {
         if (!title) {
