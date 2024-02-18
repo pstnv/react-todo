@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import fetchData from "../../utils/fetchData";
+import sortList from "../../utils/sortList";
 import style from "./TodoContainer.module.css";
 import options from "../../utils/options";
 import TodoList from "../TodoList/TodoList";
@@ -28,11 +29,6 @@ function TodoContainer() {
     const [sortOption, setSortOption] = useState(defaultSorting);
     const [updatingTodoId, setUpdatingTodoId] = useState(null);
     const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
-    const prevTodoList = useRef(todoList);
-
-    useEffect(() => {
-        prevTodoList.current = todoList;
-    });
 
     const fetchTodos = useCallback(async () => {
         const data = await fetchData(urlAPI, options.get);
@@ -53,58 +49,22 @@ function TodoContainer() {
                 createdTime,
             };
         });
-        setTodoList(todos);
         setIsLoading(false);
+        setTodoList(todos);
     }, [urlAPI]);
 
     useEffect(() => {
         fetchTodos();
     }, [fetchTodos]);
 
-    useEffect(() => {
-        const currentTodoList = [...todoList];
-
-        const sortList = {
-            asc(list) {
-                list.sort((objectA, objectB) =>
-                    objectA.title.localeCompare(objectB.title)
-                );
-            },
-            desc(list) {
-                list.sort((objectA, objectB) =>
-                    objectB.title.localeCompare(objectA.title)
-                );
-            },
-            edit(list) {
-                list.sort(
-                    (objectA, objectB) =>
-                        new Date(objectB.edited) - new Date(objectA.edited)
-                );
-            },
-            new(list) {
-                list.sort(
-                    (objectA, objectB) =>
-                        new Date(objectB.createdTime) -
-                        new Date(objectA.createdTime)
-                );
-            },
-            old(list) {
-                list.sort(
-                    (objectA, objectB) =>
-                        new Date(objectA.createdTime) -
-                        new Date(objectB.createdTime)
-                );
-            },
-        };
-        sortList[sortOption](currentTodoList);
-        if (
-            JSON.stringify(currentTodoList) ===
-            JSON.stringify(prevTodoList.current)
-        ) {
-            return;
+    const sortedTodoList = useMemo(() => {
+        if (isLoading) {
+            return todoList;
         }
-        setTodoList(currentTodoList);
-    }, [sortOption, todoList]);
+        const sortedList = sortList(sortOption, todoList);
+        return sortedList;
+    }, [sortOption, todoList, isLoading]);
+
 
     const addTodo = async (title) => {
         if (!title) {
@@ -234,7 +194,7 @@ function TodoContainer() {
             ) : (
                 <>
                     <TodoList
-                        todoList={todoList}
+                        todoList={sortedTodoList}
                         onRemoveTodo={removeTodo}
                         onEditTodo={editTodo}
                         onCompleteTodo={completeTodo}
