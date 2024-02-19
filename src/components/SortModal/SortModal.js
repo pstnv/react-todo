@@ -19,7 +19,7 @@ function SortModal({
                 onSortTodoList={onSortTodoList}
             />
             <Button styles={style.btn} onClickHandler={onHideModal}>
-                Закрыть
+                Close
             </Button>
         </Modal>
     );

@@ -6,13 +6,27 @@ import Header from "../Header/Header";
 import Lists from "../Lists/Lists";
 import style from "./ListsContainer.module.css";
 import ListsFooter from "../ListsFooter/ListsFooter";
+import SortModal from "../SortModal/SortModal";
+import { useFilteredAndSortedLists } from "../../customHooks/useFilteredLists";
+
+const SORT_LISTS_KEY = "defaultSorting";
+
+const sortOptions = [
+    { name: "A to Z", option: "asc" },
+    { name: "Z to A", option: "desc" },
+];
 
 const urlTablesAPI = `https://api.airtable.com/v0/meta/bases/${process.env.REACT_APP_AIRTABLE_BASE_ID}/tables`;
 const urlSingleBaseAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}`;
 
 function ListsContainer() {
+    const defaultSorting =
+        JSON.parse(localStorage.getItem(SORT_LISTS_KEY)) || "edit";
+
     const [lists, setLists] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [modal, setModal] = useState(false);
+    const [sortOption, setSortOption] = useState(defaultSorting);
 
     const prevLists = useRef(lists);
     useEffect(() => {
@@ -38,16 +52,7 @@ function ListsContainer() {
         showLists();
     }, []);
 
-    useEffect(() => {
-        const activeLists = lists.filter(
-            (list) => list.name !== list.id && list.description !== "deleted"
-        );
-        if (JSON.stringify(activeLists) === JSON.stringify(prevLists.current)) {
-            return;
-        }
-        setLists(activeLists);
-    }, [lists]);
-
+    const filteredAndSortedLists = useFilteredAndSortedLists(isLoading, lists, sortOption);
     async function addList() {
         const tableName = prompt("Enter new list name.");
         if (!tableName) {
@@ -124,15 +129,40 @@ function ListsContainer() {
         }
     }
 
+    function showModal() {
+        setModal(true);
+    }
+
+    function hideModal() {
+        setModal(false);
+    }
+
+    function sortTodoList(option = defaultSorting) {
+        setSortOption(option);
+        localStorage.setItem(SORT_LISTS_KEY, JSON.stringify(option));
+    }
+
     return (
         <div className={style.container}>
-            <Header />
+            <Header styles={style.header} onShowModal={showModal}>
+                <div>
+                    <span className={style.grey}>Your</span>
+                    <span>Notes</span>
+                </div>
+            </Header>
+            <SortModal
+                sortOptions={sortOptions}
+                onSortTodoList={sortTodoList}
+                selectedSorting={sortOption}
+                visible={modal}
+                onHideModal={hideModal}
+            />
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>
             ) : (
                 <>
                     <Lists
-                        lists={lists}
+                        lists={filteredAndSortedLists}
                         onRenameList={renameList}
                         onDeleteList={deleteList}
                     />

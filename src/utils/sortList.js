@@ -2,14 +2,20 @@ function sortList(selectedSorting, list) {
     const currentList = [...list];
     const sortList = {
         asc(list) {
-            list.sort((objectA, objectB) =>
-                objectA.title.localeCompare(objectB.title)
-            );
+            list.sort((objectA, objectB) => {
+                const property = objectA.hasOwnProperty("title")
+                    ? "title"
+                    : "name";
+                return objectA[property].localeCompare(objectB[property]);
+            });
         },
         desc(list) {
-            list.sort((objectA, objectB) =>
-                objectB.title.localeCompare(objectA.title)
-            );
+            list.sort((objectA, objectB) => {
+                const property = objectA.hasOwnProperty("title")
+                    ? "title"
+                    : "name";
+                return objectB[property].localeCompare(objectA[property]);
+            });
         },
         edit(list) {
             list.sort(
