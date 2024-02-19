@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 function Button({ children, onClickHandler, params, styles, type }) {
     const onBtnClick = (params) => (event) => {
         event.stopPropagation();
-        if (onClickHandler && typeof onClickHandler === "function") {
+        if (onClickHandler) {
             onClickHandler(...params);
         }
     };
