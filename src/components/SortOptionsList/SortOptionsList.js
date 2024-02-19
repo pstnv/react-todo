@@ -1,17 +1,13 @@
 import PropTypes from "prop-types";
 import SortOptionsItem from "../SortOptionsItem/SortOptionsItem";
-import Modal from "../UI/Modal/Modal";
 import style from "./SortOptionsList.module.css";
 
 function SortOptionsList({
     sortOptions,
     selectedSorting,
     onSortTodoList,
-    visible,
-    onHideModal,
 }) {
     return (
-        <Modal visible={visible} onHideModal={onHideModal}>
             <ul className={style.optionsList}>
                 {sortOptions.map(({ name, option }) => {
                     const isSelected = option === selectedSorting;
@@ -26,7 +22,6 @@ function SortOptionsList({
                     );
                 })}
             </ul>
-        </Modal>
     );
 }
 

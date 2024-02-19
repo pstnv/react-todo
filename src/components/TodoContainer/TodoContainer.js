@@ -6,7 +6,7 @@ import useSortedList from "../../customHooks/useSortedList";
 import options from "../../utils/options";
 import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
-import SortOptionsList from "../SortOptionsList/SortOptionsList";
+import SortModal from "../SortModal/SortModal";
 import TodoHeader from "../TodoHeader/TodoHeader";
 import TodoFooter from "../TodoFooter/TodoFooter";
 
@@ -188,7 +188,7 @@ function TodoContainer() {
                 updatingTodoTitle={updatingTodoTitle}
                 onUpdateTodo={updateTodo}
             />
-            <SortOptionsList
+            <SortModal
                 sortOptions={sortOptions}
                 onSortTodoList={sortTodoList}
                 selectedSorting={sortOption}
