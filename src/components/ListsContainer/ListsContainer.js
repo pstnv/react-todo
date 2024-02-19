@@ -9,7 +9,7 @@ import ListsFooter from "../ListsFooter/ListsFooter";
 import SortModal from "../SortModal/SortModal";
 import { useFilteredAndSortedLists } from "../../customHooks/useFilteredLists";
 
-const SORT_LISTS_KEY = "defaultSorting";
+const SORT_LISTS_KEY = "listsSorting";
 
 const sortOptions = [
     { name: "A to Z", option: "asc" },
@@ -21,7 +21,7 @@ const urlSingleBaseAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AI
 
 function ListsContainer() {
     const defaultSorting =
-        JSON.parse(localStorage.getItem(SORT_LISTS_KEY)) || "edit";
+        JSON.parse(localStorage.getItem(SORT_LISTS_KEY)) || "asc";
 
     const [lists, setLists] = useState([]);
     const [isLoading, setIsLoading] = useState(true);

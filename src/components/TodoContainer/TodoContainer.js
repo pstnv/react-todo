@@ -10,7 +10,7 @@ import SortModal from "../SortModal/SortModal";
 import TodoHeader from "../TodoHeader/TodoHeader";
 import TodoFooter from "../TodoFooter/TodoFooter";
 
-const SORT_KEY = "defaultSorting";
+const SORT_KEY = "listRecordsSorting";
 
 const sortOptions = [
     { name: "Newest", option: "new" },
