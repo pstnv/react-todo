@@ -7,7 +7,7 @@ import options from "../../utils/options";
 import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
 import SortModal from "../SortModal/SortModal";
-import TodoHeader from "../TodoHeader/TodoHeader";
+import Header from "../Header/Header";
 import TodoFooter from "../TodoFooter/TodoFooter";
 
 const SORT_KEY = "listRecordsSorting";
@@ -180,9 +180,9 @@ function TodoContainer() {
 
     return (
         <div className={style.container}>
-            <TodoHeader styles={style.header} onShowModal={showModal}>
+            <Header styles={style.header} onShowModal={showModal}>
                 <h1 className={style.title}>{tableName} </h1>
-            </TodoHeader>
+            </Header>
             <AddTodoForm
                 onAddTodo={addTodo}
                 updatingTodoTitle={updatingTodoTitle}
