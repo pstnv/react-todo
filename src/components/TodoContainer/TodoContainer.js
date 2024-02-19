@@ -7,7 +7,9 @@ import options from "../../utils/options";
 import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
 import SortOptionsList from "../SortOptionsList/SortOptionsList";
+import TodoHeader from "../TodoHeader/TodoHeader";
 import TodoFooter from "../TodoFooter/TodoFooter";
+
 const SORT_KEY = "defaultSorting";
 
 const sortOptions = [
@@ -29,6 +31,7 @@ function TodoContainer() {
     const [sortOption, setSortOption] = useState(defaultSorting);
     const [updatingTodoId, setUpdatingTodoId] = useState(null);
     const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
+    const [modal, setModal] = useState(false);
 
     const fetchTodos = useCallback(async () => {
         const data = await fetchData(urlAPI, options.get);
@@ -167,21 +170,31 @@ function TodoContainer() {
         localStorage.setItem(SORT_KEY, JSON.stringify(option));
     }
 
+    function showModal() {
+        setModal(true);
+    }
+
+    function hideModal() {
+        setModal(false);
+    }
+
     return (
         <div className={style.container}>
-            <h1 className={style.header}>{tableName} </h1>
+            <TodoHeader styles={style.header} onShowModal={showModal}>
+                <h1 className={style.title}>{tableName} </h1>
+            </TodoHeader>
             <AddTodoForm
                 onAddTodo={addTodo}
                 updatingTodoTitle={updatingTodoTitle}
                 onUpdateTodo={updateTodo}
             />
-            {!isLoading && (
-                <SortOptionsList
-                    sortOptions={sortOptions}
-                    onSortTodoList={sortTodoList}
-                    selectedSorting={sortOption}
-                />
-            )}
+            <SortOptionsList
+                sortOptions={sortOptions}
+                onSortTodoList={sortTodoList}
+                selectedSorting={sortOption}
+                visible={modal}
+                onHideModal={hideModal}
+            />
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>
             ) : (

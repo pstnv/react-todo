@@ -1,25 +1,32 @@
 import PropTypes from "prop-types";
-import Button from "../UI/Button/Button";
+import SortOptionsItem from "../SortOptionsItem/SortOptionsItem";
+import Modal from "../UI/Modal/Modal";
 import style from "./SortOptionsList.module.css";
 
-function SortOptionsList({ sortOptions, selectedSorting, onSortTodoList }) {
+function SortOptionsList({
+    sortOptions,
+    selectedSorting,
+    onSortTodoList,
+    visible,
+    onHideModal,
+}) {
     return (
-        <div className={style.optionsContainer}>
-            {sortOptions.map((sortOption) => {
-                const { name, option } = sortOption;
-                const isSelected = option === selectedSorting;
-                return (
-                    <Button
-                        key={option}
-                        params={[option]}
-                        styles={`${style.btn} ${isSelected && style.selected}`}
-                        onClickHandler={onSortTodoList}
-                    >
-                        {name}
-                    </Button>
-                );
-            })}
-        </div>
+        <Modal visible={visible} onHideModal={onHideModal}>
+            <ul className={style.optionsList}>
+                {sortOptions.map(({ name, option }) => {
+                    const isSelected = option === selectedSorting;
+                    return (
+                        <SortOptionsItem
+                            key={name}
+                            isSelected={isSelected}
+                            name={name}
+                            option={option}
+                            onSortTodoList={onSortTodoList}
+                        />
+                    );
+                })}
+            </ul>
+        </Modal>
     );
 }
 
