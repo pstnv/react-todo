@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import fetchData from "../../utils/fetchData";
 import options from "../../utils/options";
 import createTableTemplate from "../../utils/createTableTemplate";
@@ -28,11 +28,6 @@ function ListsContainer() {
     const [modal, setModal] = useState(false);
     const [sortOption, setSortOption] = useState(defaultSorting);
 
-    const prevLists = useRef(lists);
-    useEffect(() => {
-        prevLists.current = lists;
-    });
-
     useEffect(() => {
         async function showLists() {
             const data = await fetchData(urlTablesAPI, options.get);
@@ -53,6 +48,7 @@ function ListsContainer() {
     }, []);
 
     const filteredAndSortedLists = useFilteredAndSortedLists(isLoading, lists, sortOption);
+    
     async function addList() {
         const tableName = prompt("Enter new list name.");
         if (!tableName) {
