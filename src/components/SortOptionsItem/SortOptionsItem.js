@@ -5,9 +5,6 @@ function SortOptionsItem({ isSelected, name, option, onSortTodoList }) {
     if (isSelected) {
         styles.push(style.selected);
     }
-    const onClickHandler = () => {
-        onSortTodoList(option);
-    }
     return <li className={styles.join(' ')} onClick={() => onSortTodoList(option)}>{name}</li>;
 }
 

@@ -2,19 +2,32 @@ import React from "react";
 import PropTypes from "prop-types";
 import TodoListItem from "../TodoListItem/TodoListItem";
 import style from "./TodoList.module.css";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 function TodoList({ todoList, onEditTodo, onRemoveTodo, onCompleteTodo }) {
     return (
         <ul className={style.list}>
-            {todoList.map((todo) => (
-                <TodoListItem
-                    key={todo.id}
-                    {...todo}
-                    onEditTodo={onEditTodo}
-                    onRemoveTodo={onRemoveTodo}
-                    onCompleteTodo={onCompleteTodo}
-                />
-            ))}
+            <TransitionGroup>
+                {todoList.map((todo) => (
+                    <CSSTransition
+                        key={todo.id}
+                        timeout={200}
+                        classNames={{
+                            enter: style.itemEnter,
+                            enterActive: style.itemEnterActive,
+                            exit: style.itemExit,
+                            exitActive: style.itemExitActive,
+                        }}
+                    >
+                        <TodoListItem
+                            {...todo}
+                            onEditTodo={onEditTodo}
+                            onRemoveTodo={onRemoveTodo}
+                            onCompleteTodo={onCompleteTodo}
+                        />
+                    </CSSTransition>
+                ))}
+            </TransitionGroup>
         </ul>
     );
 }
