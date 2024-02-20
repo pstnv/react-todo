@@ -3,6 +3,7 @@ import Modal from "../UI/Modal/Modal";
 import SortOptionsList from "../SortOptionsList/SortOptionsList";
 import Button from "../UI/Button/Button";
 import style from './Sortmodal.module.css';
+const animated = true;
 
 function SortModal({
     sortOptions,
@@ -12,16 +13,16 @@ function SortModal({
     onHideModal,
 }) {
     return (
-        <Modal visible={visible} onHideModal={onHideModal}>
-            <SortOptionsList
-                sortOptions={sortOptions}
-                selectedSorting={selectedSorting}
-                onSortTodoList={onSortTodoList}
-            />
-            <Button styles={style.btn} onClickHandler={onHideModal}>
-                Close
-            </Button>
-        </Modal>
+            <Modal visible={visible} onHideModal={onHideModal} animated={animated}>
+                <SortOptionsList
+                    sortOptions={sortOptions}
+                    selectedSorting={selectedSorting}
+                    onSortTodoList={onSortTodoList}
+                />
+                <Button styles={style.btn} onClickHandler={onHideModal}>
+                    Close
+                </Button>
+            </Modal>
     );
 }
 
