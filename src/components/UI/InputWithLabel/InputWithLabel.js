@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import style from "./InputWithLabel.module.css";
 
@@ -9,10 +8,6 @@ function InputWithLabel({
     todoTitle,
     handleTitleChange,
 }) {
-    const inputRef = useRef();
-    useEffect(() => {
-        inputRef.current.focus();
-    });
     return (
         <>
             <label htmlFor={id}>{children}</label>
@@ -21,7 +16,6 @@ function InputWithLabel({
                 id={id}
                 value={todoTitle}
                 onChange={handleTitleChange}
-                ref={inputRef}
                 className={style.input}
             />
         </>
