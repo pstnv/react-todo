@@ -7,15 +7,24 @@ import style from "./AddTodoForm.module.css";
 import Modal from "../UI/Modal/Modal";
 const animated = false;
 
-function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo, visible, setInputModal }) {
+function AddTodoForm({
+    onAddTodo,
+    updatingTodoTitle,
+    onUpdateTodo,
+    visible,
+    setInputModal,
+}) {
     const [todoTitle, setTodoTitle] = useState("");
 
     const modalClasses = [style.modal];
     if (visible) {
         modalClasses.push(style.active);
     }
-    
-    const onHideModal = () => setInputModal(false);
+
+    const onHideModal = () => {
+        setTodoTitle("");
+        setInputModal(false);
+    };
 
     function handleTitleChange(e) {
         const newTodoTitle = e.target.value;
@@ -24,7 +33,6 @@ function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo, visible, setI
     function handleAddTodo(e) {
         e.preventDefault();
         updatingTodoTitle ? onUpdateTodo(todoTitle) : onAddTodo(todoTitle);
-        setTodoTitle("");
         onHideModal();
     }
 
@@ -33,7 +41,12 @@ function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo, visible, setI
     }, [updatingTodoTitle]);
 
     return (
-        <Modal visible={visible} animated={animated} propStyle={modalClasses.join(' ')} onHideModal={onHideModal}>
+        <Modal
+            visible={visible}
+            animated={animated}
+            propStyle={modalClasses.join(" ")}
+            onHideModal={onHideModal}
+        >
             <form onSubmit={handleAddTodo} className={style.form}>
                 <InputWithLabel
                     id="todoTitle"
