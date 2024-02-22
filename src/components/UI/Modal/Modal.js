@@ -1,8 +1,6 @@
 import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import style from "./Modal.module.css";
-import useIsMounted from "../../../customHooks/useIsMounted";
+import { useSlideModal, useIsMounted } from "../../../customHooks/useAnimation";
 
 function Modal({ children, visible, onHideModal, animated }) {
     const modalContainer = useRef();
@@ -10,24 +8,7 @@ function Modal({ children, visible, onHideModal, animated }) {
     const modalClasses = [style.modal];
     const isMounting = useIsMounted();
 
-    useGSAP(() => {
-        if (isMounting) {
-            return;
-        }
-        const modalAnimation = gsap.timeline({ paused: true });
-        modalAnimation
-            .fromTo(
-                modalContainer.current,
-                { display: "none", duration: 0 },
-                { display: "flex", duration: 0 }
-            )
-            .fromTo(modalContent.current, { y: 400 }, { y: 0 });
-        if (visible) {
-            modalAnimation.play();
-        } else {
-            modalAnimation.reverse(0);
-        }
-    }, [visible]);
+    useSlideModal(isMounting, visible, modalContainer, modalContent);
     return (
         <div
             ref={modalContainer}
