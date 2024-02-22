@@ -9,7 +9,7 @@ function Modal({ children, visible, onHideModal, animated, propStyle='' }) {
 
     const isMounting = useIsMounted();
 
-    useSlideModal(isMounting, visible, modalContainer, modalContent);
+    useSlideModal(animated, isMounting, visible, modalContainer, modalContent);
     return (
         <div
             ref={modalContainer}

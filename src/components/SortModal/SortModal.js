@@ -10,8 +10,9 @@ function SortModal({
     selectedSorting,
     onSortTodoList,
     visible,
-    onHideModal,
+    setSortModal,
 }) {
+    const onHideModal = () => setSortModal(false);
     return (
         <Modal
             visible={visible}

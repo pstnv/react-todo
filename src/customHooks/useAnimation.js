@@ -11,9 +11,9 @@ export const useIsMounted = () => {
     return isMounted.current;
 }
 
-export const useSlideModal = (isMounting, visible, modalContainer, modalContent) => {
+export const useSlideModal = (animated, isMounting, visible, modalContainer, modalContent) => {
     useGSAP(() => {
-        if (isMounting) {
+        if (!animated || isMounting) {
             return;
         }
         const modalAnimation = gsap.timeline({ paused: true });

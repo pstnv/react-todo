@@ -9,6 +9,7 @@ import AddTodoForm from "../AddTodoForm/AddTodoForm";
 import SortModal from "../SortModal/SortModal";
 import Header from "../Header/Header";
 import TodoFooter from "../TodoFooter/TodoFooter";
+import Button from "../UI/Button/Button";
 
 const SORT_KEY = "listRecordsSorting";
 
@@ -31,7 +32,7 @@ function TodoContainer() {
     const [sortOption, setSortOption] = useState(defaultSorting);
     const [updatingTodoId, setUpdatingTodoId] = useState(null);
     const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
-    const [modal, setModal] = useState(false);
+    const [isSortModal, setSortModal] = useState(false);
 
     const fetchTodos = useCallback(async () => {
         const data = await fetchData(urlAPI, options.get);
@@ -170,19 +171,12 @@ function TodoContainer() {
         localStorage.setItem(SORT_KEY, JSON.stringify(option));
     }
 
-    function showModal() {
-        setModal(true);
-    }
-
-    function hideModal() {
-        setModal(false);
-    }
-
     return (
         <div className={style.container}>
-            <Header styles={style.header} onShowModal={showModal}>
+            <Header styles={style.header} setSortModal={setSortModal}>
                 <h1 className={style.title}>{tableName} </h1>
             </Header>
+            {/* <Button>Add TODO</Button> */}
             <AddTodoForm
                 onAddTodo={addTodo}
                 updatingTodoTitle={updatingTodoTitle}
@@ -192,8 +186,8 @@ function TodoContainer() {
                 sortOptions={sortOptions}
                 onSortTodoList={sortTodoList}
                 selectedSorting={sortOption}
-                visible={modal}
-                onHideModal={hideModal}
+                visible={isSortModal}
+                setSortModal={setSortModal}
             />
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>

@@ -25,7 +25,7 @@ function ListsContainer() {
 
     const [lists, setLists] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [modal, setModal] = useState(false);
+    const [isSortModal, setSortModal] = useState(false);
     const [sortOption, setSortOption] = useState(defaultSorting);
 
     useEffect(() => {
@@ -125,14 +125,6 @@ function ListsContainer() {
         }
     }
 
-    function showModal() {
-        setModal(true);
-    }
-
-    function hideModal() {
-        setModal(false);
-    }
-
     function sortTodoList(option = defaultSorting) {
         setSortOption(option);
         localStorage.setItem(SORT_LISTS_KEY, JSON.stringify(option));
@@ -140,7 +132,7 @@ function ListsContainer() {
 
     return (
         <div className={style.container}>
-            <Header styles={style.header} onShowModal={showModal}>
+            <Header styles={style.header} setSortModal={setSortModal}>
                 <div>
                     <span className={style.grey}>Your</span>
                     <span>Notes</span>
@@ -150,8 +142,8 @@ function ListsContainer() {
                 sortOptions={sortOptions}
                 onSortTodoList={sortTodoList}
                 selectedSorting={sortOption}
-                visible={modal}
-                onHideModal={hideModal}
+                visible={isSortModal}
+                setSortModal={setSortModal}
             />
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>
