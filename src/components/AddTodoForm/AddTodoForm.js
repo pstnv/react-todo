@@ -4,9 +4,18 @@ import PropTypes from "prop-types";
 import InputWithLabel from "../UI/InputWithLabel/InputWithLabel";
 import Button from "../UI/Button/Button";
 import style from "./AddTodoForm.module.css";
+import Modal from "../UI/Modal/Modal";
+const animated = false;
 
-function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {
+function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo, visible, setInputModal }) {
     const [todoTitle, setTodoTitle] = useState("");
+
+    const modalClasses = [style.modal];
+    if (visible) {
+        modalClasses.push(style.active);
+    }
+    
+    const onHideModal = () => setInputModal(false);
 
     function handleTitleChange(e) {
         const newTodoTitle = e.target.value;
@@ -16,6 +25,7 @@ function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {
         e.preventDefault();
         updatingTodoTitle ? onUpdateTodo(todoTitle) : onAddTodo(todoTitle);
         setTodoTitle("");
+        onHideModal();
     }
 
     useEffect(() => {
@@ -23,16 +33,18 @@ function AddTodoForm({ onAddTodo, updatingTodoTitle, onUpdateTodo }) {
     }, [updatingTodoTitle]);
 
     return (
-        <form onSubmit={handleAddTodo} className={style.form}>
-            <InputWithLabel
-                id="todoTitle"
-                todoTitle={todoTitle}
-                handleTitleChange={handleTitleChange}
-            />
-            <Button type="submit" styles={style.btn}>
-                {!todoTitle && updatingTodoTitle ? "Cancel" : "Ok"}
-            </Button>
-        </form>
+        <Modal visible={visible} animated={animated} propStyle={modalClasses.join(' ')} onHideModal={onHideModal}>
+            <form onSubmit={handleAddTodo} className={style.form}>
+                <InputWithLabel
+                    id="todoTitle"
+                    todoTitle={todoTitle}
+                    handleTitleChange={handleTitleChange}
+                />
+                <Button type="submit" styles={style.btn}>
+                    {!todoTitle && updatingTodoTitle ? "Cancel" : "Ok"}
+                </Button>
+            </form>
+        </Modal>
     );
 }
 

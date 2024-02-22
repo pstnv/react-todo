@@ -33,6 +33,7 @@ function TodoContainer() {
     const [updatingTodoId, setUpdatingTodoId] = useState(null);
     const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
     const [isSortModal, setSortModal] = useState(false);
+    const [isInputModal, setInputModal] = useState(false);
 
     const fetchTodos = useCallback(async () => {
         const data = await fetchData(urlAPI, options.get);
@@ -176,11 +177,13 @@ function TodoContainer() {
             <Header styles={style.header} setSortModal={setSortModal}>
                 <h1 className={style.title}>{tableName} </h1>
             </Header>
-            {/* <Button>Add TODO</Button> */}
+            <Button onClickHandler={() => setInputModal(true)}>Add TODO</Button>
             <AddTodoForm
                 onAddTodo={addTodo}
                 updatingTodoTitle={updatingTodoTitle}
                 onUpdateTodo={updateTodo}
+                visible={isInputModal}
+                setInputModal={setInputModal}
             />
             <SortModal
                 sortOptions={sortOptions}
