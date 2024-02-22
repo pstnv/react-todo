@@ -2,10 +2,11 @@ import { useRef } from "react";
 import style from "./Modal.module.css";
 import { useSlideModal, useIsMounted } from "../../../customHooks/useAnimation";
 
-function Modal({ children, visible, onHideModal, animated }) {
+function Modal({ children, visible, onHideModal, animated, propStyle='' }) {
     const modalContainer = useRef();
     const modalContent = useRef();
-    const modalClasses = [style.modal];
+    const modalClasses = [style.modal, propStyle];
+
     const isMounting = useIsMounted();
 
     useSlideModal(isMounting, visible, modalContainer, modalContent);

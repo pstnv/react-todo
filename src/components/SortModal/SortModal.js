@@ -13,16 +13,21 @@ function SortModal({
     onHideModal,
 }) {
     return (
-            <Modal visible={visible} onHideModal={onHideModal} animated={animated}>
-                <SortOptionsList
-                    sortOptions={sortOptions}
-                    selectedSorting={selectedSorting}
-                    onSortTodoList={onSortTodoList}
-                />
-                <Button styles={style.btn} onClickHandler={onHideModal}>
-                    Close
-                </Button>
-            </Modal>
+        <Modal
+            visible={visible}
+            onHideModal={onHideModal}
+            animated={animated}
+            propStyle={style.modal}
+        >
+            <SortOptionsList
+                sortOptions={sortOptions}
+                selectedSorting={selectedSorting}
+                onSortTodoList={onSortTodoList}
+            />
+            <Button styles={style.btn} onClickHandler={onHideModal}>
+                Close
+            </Button>
+        </Modal>
     );
 }
 
