@@ -5,7 +5,7 @@ import createTableTemplate from "../../utils/createTableTemplate";
 import Header from "../Header/Header";
 import Lists from "../Lists/Lists";
 import style from "./ListsContainer.module.css";
-import ListsFooter from "../ListsFooter/ListsFooter";
+import Footer from "../Footer/Footer";
 import SortModal from "../SortModal/SortModal";
 import { useFilteredAndSortedLists } from "../../customHooks/useFilteredLists";
 
@@ -154,7 +154,7 @@ function ListsContainer() {
                         onRenameList={renameList}
                         onDeleteList={deleteList}
                     />
-                    <ListsFooter addList={addList} />
+                    <Footer onClickHandler={addList} />
                 </>
             )}
         </div>

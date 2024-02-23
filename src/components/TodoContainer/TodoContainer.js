@@ -8,8 +8,7 @@ import TodoList from "../TodoList/TodoList";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
 import SortModal from "../SortModal/SortModal";
 import Header from "../Header/Header";
-import TodoFooter from "../TodoFooter/TodoFooter";
-import Button from "../UI/Button/Button";
+import Footer from "../Footer/Footer";
 
 const SORT_KEY = "listRecordsSorting";
 
@@ -184,7 +183,6 @@ function TodoContainer() {
             <Header styles={style.header} setSortModal={setSortModal}>
                 <h1 className={style.title}>{tableName} </h1>
             </Header>
-            <Button onClickHandler={() => setInputModal(true)}>Add TODO</Button>
             <AddTodoForm
                 onAddTodo={addTodo}
                 updatingTodoTitle={updatingTodoTitle}
@@ -209,7 +207,7 @@ function TodoContainer() {
                         onEditTodo={editTodo}
                         onCompleteTodo={completeTodo}
                     />
-                    <TodoFooter />
+                    <Footer onClickHandler={() => setInputModal(true)} />
                 </>
             )}
         </div>
