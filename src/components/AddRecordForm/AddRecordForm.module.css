@@ -9,7 +9,6 @@
 .modal {
     display: none;
     flex-direction: column;
-    justify-content: center;
 }
 .modal.active {
     display: flex;
