@@ -34,6 +34,6 @@ export const useSlideModal = (
             modalAnimation.play();
         } else {
             modalAnimation.reverse(0);
-        }s
+        }
     }, [visible]);
 };
