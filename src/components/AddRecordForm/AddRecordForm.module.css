@@ -8,10 +8,13 @@
 }
 .modal {
     display: none;
-    flex-direction: column;
 }
 .modal.active {
-    display: flex;
+    display: block;
+}
+.modal > div {
+    width: 100%;
+    position: fixed;
 }
 .btn {
     margin-left: 20px;
