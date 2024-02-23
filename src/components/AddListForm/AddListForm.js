@@ -27,19 +27,24 @@ function AddListForm({
     function handleAddList(e) {
         e.preventDefault();
         updatingListTitle ? onUpdateList(listTitle) : onAddList(listTitle);
-        setListTitle("");
-        onHideInputModal();
+        onHideModal();
     }
     useEffect(() => {
         setListTitle(updatingListTitle);
     }, [updatingListTitle]);
+    
+
+    const onHideModal = () => {
+        setListTitle("");
+        onHideInputModal();
+    };
 
     return (
         <Modal
             visible={visible}
             animated={animated}
             propStyle={modalClasses.join(" ")}
-            onHideModal={onHideInputModal}
+            onHideModal={onHideModal}
         >
             <form onSubmit={handleAddList} className={style.form}>
                 <InputWithLabel

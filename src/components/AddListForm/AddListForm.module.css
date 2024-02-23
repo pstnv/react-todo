@@ -13,7 +13,6 @@
 }
 .modal.active {
     display: flex;
-    border: 2px solid red;
 }
 .btn {
     margin-left: 20px;

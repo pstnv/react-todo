@@ -27,19 +27,23 @@ function AddTodoForm({
     function handleAddTodo(e) {
         e.preventDefault();
         updatingTodoTitle ? onUpdateTodo(todoTitle) : onAddTodo(todoTitle);
-        setTodoTitle("");
-        onHideInputModal();
+        onHideModal();
     }
     useEffect(() => {
         setTodoTitle(updatingTodoTitle);
     }, [updatingTodoTitle]);
+
+    const onHideModal = () => {
+        setTodoTitle("");
+        onHideInputModal();
+    };
 
     return (
         <Modal
             visible={visible}
             animated={animated}
             propStyle={modalClasses.join(" ")}
-            onHideModal={onHideInputModal}
+            onHideModal={onHideModal}
         >
             <form onSubmit={handleAddTodo} className={style.form}>
                 <InputWithLabel
