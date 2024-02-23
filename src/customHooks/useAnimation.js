@@ -1,6 +1,6 @@
+import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { useRef, useEffect } from "react";
 
 export const useIsMounted = () => {
     const isMounted = useRef(true);
@@ -9,9 +9,15 @@ export const useIsMounted = () => {
         return () => (isMounted.current = true);
     }, []);
     return isMounted.current;
-}
+};
 
-export const useSlideModal = (animated, isMounting, visible, modalContainer, modalContent) => {
+export const useSlideModal = (
+    animated,
+    isMounting,
+    visible,
+    modalContainer,
+    modalContent
+) => {
     useGSAP(() => {
         if (!animated || isMounting) {
             return;
@@ -28,6 +34,6 @@ export const useSlideModal = (animated, isMounting, visible, modalContainer, mod
             modalAnimation.play();
         } else {
             modalAnimation.reverse(0);
-        }
+        }s
     }, [visible]);
 };

@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import Modal from "../UI/Modal/Modal";
 import SortOptionsList from "../SortOptionsList/SortOptionsList";
 import Button from "../UI/Button/Button";
-import style from './Sortmodal.module.css';
+import style from "./Sortmodal.module.css";
 const animated = true;
 
 function SortModal({
@@ -32,7 +32,7 @@ function SortModal({
     );
 }
 
-SortOptionsList.propTypes = {
+SortModal.propTypes = {
     sortOptions: PropTypes.arrayOf(
         PropTypes.shape({
             name: PropTypes.string,
@@ -41,9 +41,12 @@ SortOptionsList.propTypes = {
     ),
     selectedSorting: PropTypes.string,
     onSortTodoList: PropTypes.func.isRequired,
+    visible: PropTypes.bool.isRequired,
+    setSortModal: PropTypes.func.isRequired,
 };
-SortOptionsList.defaultProps = {
+SortModal.defaultProps = {
     sortOptions: [],
+    visible: false,
 };
 
 export default SortModal;

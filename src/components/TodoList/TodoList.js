@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TodoListItem from "../TodoListItem/TodoListItem";
 import style from "./TodoList.module.css";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 function TodoList({ todoList, onEditTodo, onRemoveTodo, onCompleteTodo }) {
     return (

@@ -16,11 +16,15 @@ function AddRecordForm({
     onHideInputModal,
 }) {
     const [recordTitle, setRecordTitle] = useState("");
-
     const modalClasses = [style.modal];
     if (visible) {
         modalClasses.push(style.active);
     }
+
+    useEffect(() => {
+        setRecordTitle(updatingRecordTitle);
+    }, [updatingRecordTitle]);
+
     function handleTitleChange(e) {
         const newRecordTitle = e.target.value;
         setRecordTitle(newRecordTitle);
@@ -32,14 +36,10 @@ function AddRecordForm({
             : onAddRecord(recordTitle);
         onHideModal();
     }
-    useEffect(() => {
-        setRecordTitle(updatingRecordTitle);
-    }, [updatingRecordTitle]);
-
-    const onHideModal = () => {
+    function onHideModal() {
         setRecordTitle("");
         onHideInputModal();
-    };
+    }
 
     return (
         <Modal

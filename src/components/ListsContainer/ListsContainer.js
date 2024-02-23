@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useFilteredAndSortedLists } from "../../customHooks/useFilteredLists";
-import fetchData from "../../utils/fetchData";
-import options from "../../utils/options";
+import { options, fetchData } from "../../utils/fetchData";
 import createTableTemplate from "../../utils/createTableTemplate";
 import Header from "../Header/Header";
 import AddRecordForm from "../AddRecordForm/AddRecordForm";
@@ -25,9 +24,9 @@ function ListsContainer() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSortModal, setSortModal] = useState(false);
     const [sortOption, setSortOption] = useState(defaultSorting);
+    const [isInputModal, setInputModal] = useState(false);
     const [updatingListId, setUpdatingListId] = useState(null);
     const [updatingListTitle, setUpdatingListTitle] = useState("");
-    const [isInputModal, setInputModal] = useState(false);
 
     useEffect(() => {
         async function showLists() {

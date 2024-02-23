@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import useSortedList from "../../customHooks/useSortedList";
-import fetchData from "../../utils/fetchData";
-import options from "../../utils/options";
+import { options, fetchData } from "../../utils/fetchData";
 import Header from "../Header/Header";
 import SortModal from "../SortModal/SortModal";
 import TodoList from "../TodoList/TodoList";
@@ -24,7 +23,6 @@ function TodoContainer() {
     const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${id}`;
 
     const defaultSorting = JSON.parse(localStorage.getItem(SORT_KEY)) || "edit";
-
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSortModal, setSortModal] = useState(false);
@@ -87,19 +85,6 @@ function TodoContainer() {
         setTodoList([...todoList, newTodo]);
     };
 
-    async function removeTodo(id) {
-        if (id === updatingTodoId) {
-            setUpdatingTodoId(null);
-            setUpdatingTodoTitle("");
-        }
-        const res = await fetchData(urlAPI, options.delete, id);
-        if (!res) {
-            setIsLoading(true);
-            return;
-        }
-        setTodoList(todoList.filter((todo) => todo.id !== id));
-    }
-
     function editTodo(id, title) {
         setUpdatingTodoId(id);
         setUpdatingTodoTitle(title);
@@ -139,6 +124,19 @@ function TodoContainer() {
         });
         setTodoList(editedTodoList);
         setUpdatingTodoId(null);
+    }
+
+    async function removeTodo(id) {
+        if (id === updatingTodoId) {
+            setUpdatingTodoId(null);
+            setUpdatingTodoTitle("");
+        }
+        const res = await fetchData(urlAPI, options.delete, id);
+        if (!res) {
+            setIsLoading(true);
+            return;
+        }
+        setTodoList(todoList.filter((todo) => todo.id !== id));
     }
 
     async function completeTodo(id) {
