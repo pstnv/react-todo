@@ -2,7 +2,6 @@
     --button-size: 90px;
     --button-image-size: calc(var(--button-size) * 0.8);
 }
-
 .footer {
     width: 100%;
     height: calc(

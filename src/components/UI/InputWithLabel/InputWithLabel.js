@@ -4,25 +4,26 @@ import style from "./InputWithLabel.module.css";
 
 function InputWithLabel({
     children,
-    type,
-    id,
-    todoTitle,
     handleTitleChange,
+    id,
+    recordTitle,
+    type,
+    visible,
 }) {
     const inputRef = useRef();
     useEffect(() => {
-        inputRef.current.focus();
-    });
+        visible ? inputRef.current.focus() : inputRef.current.blur();
+    }, [visible]);
     return (
         <>
             <label htmlFor={id}>{children}</label>
             <input
-                type={type}
+                className={style.input}
                 id={id}
-                value={todoTitle}
                 onChange={handleTitleChange}
                 ref={inputRef}
-                className={style.input}
+                type={type}
+                value={recordTitle}
             />
         </>
     );
@@ -30,13 +31,15 @@ function InputWithLabel({
 
 InputWithLabel.propTypes = {
     children: PropTypes.node,
-    type: PropTypes.string,
-    id: PropTypes.string,
-    todoTitle: PropTypes.string,
     handleTitleChange: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    recordTitle: PropTypes.string,
+    type: PropTypes.string,
+    visible: PropTypes.bool,
 };
 InputWithLabel.defaultProps = {
-    type: "text",
     children: "",
+    type: "text",
+    visible: false,
 };
 export default InputWithLabel;

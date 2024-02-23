@@ -1,14 +1,14 @@
 .container {
+    padding-bottom: 90px;
     display: flex;
     flex-direction: column;
     align-items: stretch;
 }
 .header {
-    margin: 0;
-    padding: 15px;
     background-color: rgba(245, 218, 101);
-    font-size: 32px;
-    font-weight: 400;
+}
+.title {
+    margin: 0;
 }
 .loading {
     padding: 15px;
@@ -17,9 +17,8 @@
 }
 
 @media all and (max-width: 600px) {
-    .header {
-        padding: 10px;
-        font-size: 26px;
+    .container {
+        padding-bottom: 70px;
     }
     .loading {
         padding: 10px;

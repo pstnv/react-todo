@@ -2,3 +2,17 @@
     padding: 0;
     list-style-type: none;
 }
+.itemEnter {
+    opacity: 0;
+}
+.itemEnterActive {
+    opacity: 1;
+    transition: opacity 200ms ease-in;
+}
+.itemExit {
+    opacity: 1;
+}
+.itemExitActive {
+    opacity: 0;
+    transition: opacity 200ms ease-in;
+}

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import style from "./TodoListItem.module.css";
-import Button from "../Button/Button";
+import Button from "../UI/Button/Button";
 import iconEdit from "../../assets/icons/edit.png";
 import iconDelete from "../../assets/icons/deleteItem.png";
+import style from "./TodoListItem.module.css";
 
 function TodoListItem({
     id,
@@ -44,13 +44,13 @@ function TodoListItem({
 TodoListItem.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string,
-    completed: PropTypes.bool.isRequired,
+    completed: PropTypes.bool,
     onEditTodo: PropTypes.func.isRequired,
     onRemoveTodo: PropTypes.func.isRequired,
     onCompleteTodo: PropTypes.func.isRequired,
 };
 TodoListItem.defaultProps = {
     title: "",
-    completed: false
+    completed: false,
 };
 export default TodoListItem;

@@ -56,9 +56,9 @@
         min-width: 25px;
         min-height: 25px;
     }
-.button:last-of-type {
-    margin-right: 10px;
-}
+    .button:last-of-type {
+        margin-right: 10px;
+    }
     .button img {
         width: 80%;
         height: 80%;

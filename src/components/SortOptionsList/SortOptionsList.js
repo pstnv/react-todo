@@ -1,25 +1,23 @@
 import PropTypes from "prop-types";
-import Button from "../Button/Button";
+import SortOptionsItem from "../SortOptionsItem/SortOptionsItem";
 import style from "./SortOptionsList.module.css";
 
 function SortOptionsList({ sortOptions, selectedSorting, onSortTodoList }) {
     return (
-        <div className={style.optionsContainer}>
-            {sortOptions.map((sortOption) => {
-                const { name, option } = sortOption;
+        <ul className={style.optionsList}>
+            {sortOptions.map(({ name, option }) => {
                 const isSelected = option === selectedSorting;
                 return (
-                    <Button
-                        key={option}
-                        params={[option]}
-                        styles={`${style.btn} ${isSelected && style.selected}`}
-                        onClickHandler={onSortTodoList}
-                    >
-                        {name}
-                    </Button>
+                    <SortOptionsItem
+                        key={name}
+                        isSelected={isSelected}
+                        name={name}
+                        option={option}
+                        onSortTodoList={onSortTodoList}
+                    />
                 );
             })}
-        </div>
+        </ul>
     );
 }
 

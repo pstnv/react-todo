@@ -1,14 +1,15 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-import fetchData from "../../utils/fetchData";
-import style from "./TodoContainer.module.css";
-import options from "../../utils/options";
+import useSortedList from "../../customHooks/useSortedList";
+import { options, fetchData } from "../../utils/fetchData";
+import Header from "../Header/Header";
+import SortModal from "../SortModal/SortModal";
 import TodoList from "../TodoList/TodoList";
-import AddTodoForm from "../AddTodoForm/AddTodoForm";
-import SortOptionsList from "../SortOptionsList/SortOptionsList";
-import TodoFooter from "../TodoFooter/TodoFooter";
-const SORT_KEY = "defaultSorting";
+import Footer from "../Footer/Footer";
+import AddRecordForm from "../AddRecordForm/AddRecordForm";
+import style from "./TodoContainer.module.css";
 
+const SORT_KEY = "listRecordsSorting";
 const sortOptions = [
     { name: "Newest", option: "new" },
     { name: "Oldest", option: "old" },
@@ -22,17 +23,13 @@ function TodoContainer() {
     const urlAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${id}`;
 
     const defaultSorting = JSON.parse(localStorage.getItem(SORT_KEY)) || "edit";
-
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSortModal, setSortModal] = useState(false);
     const [sortOption, setSortOption] = useState(defaultSorting);
     const [updatingTodoId, setUpdatingTodoId] = useState(null);
     const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
-    const prevTodoList = useRef(todoList);
-
-    useEffect(() => {
-        prevTodoList.current = todoList;
-    });
+    const [isInputModal, setInputModal] = useState(false);
 
     const fetchTodos = useCallback(async () => {
         const data = await fetchData(urlAPI, options.get);
@@ -53,58 +50,15 @@ function TodoContainer() {
                 createdTime,
             };
         });
-        setTodoList(todos);
         setIsLoading(false);
+        setTodoList(todos);
     }, [urlAPI]);
 
     useEffect(() => {
         fetchTodos();
     }, [fetchTodos]);
 
-    useEffect(() => {
-        const currentTodoList = [...todoList];
-
-        const sortList = {
-            asc(list) {
-                list.sort((objectA, objectB) =>
-                    objectA.title.localeCompare(objectB.title)
-                );
-            },
-            desc(list) {
-                list.sort((objectA, objectB) =>
-                    objectB.title.localeCompare(objectA.title)
-                );
-            },
-            edit(list) {
-                list.sort(
-                    (objectA, objectB) =>
-                        new Date(objectB.edited) - new Date(objectA.edited)
-                );
-            },
-            new(list) {
-                list.sort(
-                    (objectA, objectB) =>
-                        new Date(objectB.createdTime) -
-                        new Date(objectA.createdTime)
-                );
-            },
-            old(list) {
-                list.sort(
-                    (objectA, objectB) =>
-                        new Date(objectA.createdTime) -
-                        new Date(objectB.createdTime)
-                );
-            },
-        };
-        sortList[sortOption](currentTodoList);
-        if (
-            JSON.stringify(currentTodoList) ===
-            JSON.stringify(prevTodoList.current)
-        ) {
-            return;
-        }
-        setTodoList(currentTodoList);
-    }, [sortOption, todoList]);
+    const sortedTodoList = useSortedList(isLoading, todoList, sortOption);
 
     const addTodo = async (title) => {
         if (!title) {
@@ -131,22 +85,10 @@ function TodoContainer() {
         setTodoList([...todoList, newTodo]);
     };
 
-    async function removeTodo(id) {
-        if (id === updatingTodoId) {
-            setUpdatingTodoId(null);
-            setUpdatingTodoTitle("");
-        }
-        const res = await fetchData(urlAPI, options.delete, id);
-        if (!res) {
-            setIsLoading(true);
-            return;
-        }
-        setTodoList(todoList.filter((todo) => todo.id !== id));
-    }
-
     function editTodo(id, title) {
         setUpdatingTodoId(id);
         setUpdatingTodoTitle(title);
+        setInputModal(true);
     }
 
     async function updateTodo(title) {
@@ -184,6 +126,19 @@ function TodoContainer() {
         setUpdatingTodoId(null);
     }
 
+    async function removeTodo(id) {
+        if (id === updatingTodoId) {
+            setUpdatingTodoId(null);
+            setUpdatingTodoTitle("");
+        }
+        const res = await fetchData(urlAPI, options.delete, id);
+        if (!res) {
+            setIsLoading(true);
+            return;
+        }
+        setTodoList(todoList.filter((todo) => todo.id !== id));
+    }
+
     async function completeTodo(id) {
         const todo = todoList.find((item) => item.id === id);
         const sentTodo = {
@@ -214,32 +169,43 @@ function TodoContainer() {
         localStorage.setItem(SORT_KEY, JSON.stringify(option));
     }
 
+    function hideInputModal() {
+        setInputModal(false);
+        setUpdatingTodoId(null);
+        setUpdatingTodoTitle("");
+    }
+
     return (
         <div className={style.container}>
-            <h1 className={style.header}>{tableName} </h1>
-            <AddTodoForm
-                onAddTodo={addTodo}
-                updatingTodoTitle={updatingTodoTitle}
-                onUpdateTodo={updateTodo}
+            <Header propStyles={style.header} setSortModal={setSortModal}>
+                <h1 className={style.title}>{tableName} </h1>
+            </Header>
+            <AddRecordForm
+                id="todoTitle"
+                onAddRecord={addTodo}
+                updatingRecordTitle={updatingTodoTitle}
+                onUpdateRecord={updateTodo}
+                visible={isInputModal}
+                onHideInputModal={hideInputModal}
             />
-            {!isLoading && (
-                <SortOptionsList
-                    sortOptions={sortOptions}
-                    onSortTodoList={sortTodoList}
-                    selectedSorting={sortOption}
-                />
-            )}
+            <SortModal
+                sortOptions={sortOptions}
+                onSortTodoList={sortTodoList}
+                selectedSorting={sortOption}
+                visible={isSortModal}
+                setSortModal={setSortModal}
+            />
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>
             ) : (
                 <>
                     <TodoList
-                        todoList={todoList}
+                        todoList={sortedTodoList}
                         onRemoveTodo={removeTodo}
                         onEditTodo={editTodo}
                         onCompleteTodo={completeTodo}
                     />
-                    <TodoFooter />
+                    <Footer onClickHandler={() => setInputModal(true)} />
                 </>
             )}
         </div>

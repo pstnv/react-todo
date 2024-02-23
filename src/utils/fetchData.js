@@ -1,6 +1,27 @@
 const tokenAPI = process.env.REACT_APP_AIRTABLE_API_TOKEN;
 
-const fetchData = async (urlAPI, params, id = "") => {
+export const options = {
+    get: {
+        method: "GET",
+    },
+    post(body) {
+        return {
+            method: "POST",
+            body: JSON.stringify(body),
+        };
+    },
+    patch(body) {
+        return {
+            method: "PATCH",
+            body: JSON.stringify(body),
+        };
+    },
+    delete: {
+        method: "DELETE",
+    },
+};
+
+export const fetchData = async (urlAPI, params, id = "") => {
     const options = {
         ...params,
         headers: {
@@ -20,5 +41,3 @@ const fetchData = async (urlAPI, params, id = "") => {
         console.log(error.message);
     }
 };
-
-export default fetchData;

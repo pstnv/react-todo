@@ -2,14 +2,14 @@ import PropTypes from "prop-types";
 import ListsItem from "../ListsItem/ListsItem";
 import style from "./Lists.module.css";
 
-function Lists({ lists, onRenameList, onDeleteList }) {
+function Lists({ lists, onEditList, onDeleteList }) {
     return (
         <ul className={style.list}>
             {lists.map((list) => (
                 <ListsItem
                     key={list.id}
                     {...list}
-                    onRenameList={onRenameList}
+                    onEditList={onEditList}
                     onDeleteList={onDeleteList}
                 />
             ))}
@@ -24,7 +24,7 @@ Lists.propTypes = {
             name: PropTypes.string,
         })
     ),
-    onRenameList: PropTypes.func.isRequired,
+    onEditList: PropTypes.func.isRequired,
     onDeleteList: PropTypes.func.isRequired,
 };
 Lists.defaultProps = {
