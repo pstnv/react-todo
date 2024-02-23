@@ -153,7 +153,7 @@ function ListsContainer() {
 
     return (
         <div className={style.container}>
-            <Header styles={style.header} setSortModal={setSortModal}>
+            <Header propStyles={style.header} setSortModal={setSortModal}>
                 <div>
                     <span className={style.grey}>Your</span>
                     <span>Notes</span>
