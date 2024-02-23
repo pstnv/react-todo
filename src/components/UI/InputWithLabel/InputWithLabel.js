@@ -1,23 +1,28 @@
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import style from "./InputWithLabel.module.css";
-import { useEffect, useRef } from "react";
 
-function InputWithLabel({ children, type, id, todoTitle, handleTitleChange }) {
+function InputWithLabel({
+    children,
+    type,
+    id,
+    recordTitle,
+    handleTitleChange,
+}) {
     const inputRef = useRef();
     useEffect(() => {
         inputRef.current.focus();
     });
-
     return (
         <>
             <label htmlFor={id}>{children}</label>
             <input
+                className={style.input}
+                id={id}
+                onChange={handleTitleChange}
                 ref={inputRef}
                 type={type}
-                id={id}
-                value={todoTitle}
-                onChange={handleTitleChange}
-                className={style.input}
+                value={recordTitle}
             />
         </>
     );
@@ -26,8 +31,8 @@ function InputWithLabel({ children, type, id, todoTitle, handleTitleChange }) {
 InputWithLabel.propTypes = {
     children: PropTypes.node,
     type: PropTypes.string,
-    id: PropTypes.string,
-    todoTitle: PropTypes.string,
+    id: PropTypes.string.isRequired,
+    recordTitle: PropTypes.string,
     handleTitleChange: PropTypes.func.isRequired,
 };
 InputWithLabel.defaultProps = {

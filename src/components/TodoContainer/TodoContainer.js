@@ -1,17 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-import fetchData from "../../utils/fetchData";
-import style from "./TodoContainer.module.css";
 import useSortedList from "../../customHooks/useSortedList";
+import fetchData from "../../utils/fetchData";
 import options from "../../utils/options";
-import TodoList from "../TodoList/TodoList";
-import AddTodoForm from "../AddTodoForm/AddTodoForm";
-import SortModal from "../SortModal/SortModal";
 import Header from "../Header/Header";
+import SortModal from "../SortModal/SortModal";
+import TodoList from "../TodoList/TodoList";
 import Footer from "../Footer/Footer";
+import AddRecordForm from "../AddRecordForm/AddRecordForm";
+import style from "./TodoContainer.module.css";
 
 const SORT_KEY = "listRecordsSorting";
-
 const sortOptions = [
     { name: "Newest", option: "new" },
     { name: "Oldest", option: "old" },
@@ -183,19 +182,20 @@ function TodoContainer() {
             <Header styles={style.header} setSortModal={setSortModal}>
                 <h1 className={style.title}>{tableName} </h1>
             </Header>
+            <AddRecordForm
+                id="todoTitle"
+                onAddRecord={addTodo}
+                updatingRecordTitle={updatingTodoTitle}
+                onUpdateRecord={updateTodo}
+                visible={isInputModal}
+                onHideInputModal={hideInputModal}
+            />
             <SortModal
                 sortOptions={sortOptions}
                 onSortTodoList={sortTodoList}
                 selectedSorting={sortOption}
                 visible={isSortModal}
                 setSortModal={setSortModal}
-            />
-            <AddTodoForm
-                onAddTodo={addTodo}
-                updatingTodoTitle={updatingTodoTitle}
-                onUpdateTodo={updateTodo}
-                visible={isInputModal}
-                onHideInputModal={hideInputModal}
             />
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>

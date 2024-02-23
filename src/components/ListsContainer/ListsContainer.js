@@ -1,29 +1,26 @@
 import { useState, useEffect } from "react";
+import { useFilteredAndSortedLists } from "../../customHooks/useFilteredLists";
 import fetchData from "../../utils/fetchData";
 import options from "../../utils/options";
 import createTableTemplate from "../../utils/createTableTemplate";
 import Header from "../Header/Header";
-import Lists from "../Lists/Lists";
-import style from "./ListsContainer.module.css";
-import Footer from "../Footer/Footer";
+import AddRecordForm from "../AddRecordForm/AddRecordForm";
 import SortModal from "../SortModal/SortModal";
-import AddListForm from "../AddListForm/AddListForm";
-import { useFilteredAndSortedLists } from "../../customHooks/useFilteredLists";
+import Lists from "../Lists/Lists";
+import Footer from "../Footer/Footer";
+import style from "./ListsContainer.module.css";
 
 const SORT_LISTS_KEY = "listsSorting";
-
 const sortOptions = [
     { name: "A to Z", option: "asc" },
     { name: "Z to A", option: "desc" },
 ];
-
 const urlTablesAPI = `https://api.airtable.com/v0/meta/bases/${process.env.REACT_APP_AIRTABLE_BASE_ID}/tables`;
 const urlSingleBaseAPI = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}`;
 
 function ListsContainer() {
     const defaultSorting =
         JSON.parse(localStorage.getItem(SORT_LISTS_KEY)) || "asc";
-
     const [lists, setLists] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSortModal, setSortModal] = useState(false);
@@ -51,8 +48,12 @@ function ListsContainer() {
         showLists();
     }, []);
 
-    const filteredAndSortedLists = useFilteredAndSortedLists(isLoading, lists, sortOption);
-    
+    const filteredAndSortedLists = useFilteredAndSortedLists(
+        isLoading,
+        lists,
+        sortOption
+    );
+
     async function addList(tableName) {
         if (!tableName) {
             return;
@@ -159,10 +160,11 @@ function ListsContainer() {
                     <span>Notes</span>
                 </div>
             </Header>
-            <AddListForm
-                onAddList={addList}
-                updatingListTitle={updatingListTitle}
-                onUpdateList={updateList}
+            <AddRecordForm
+                id="listTitle"
+                onAddRecord={addList}
+                updatingRecordTitle={updatingListTitle}
+                onUpdateRecord={updateList}
                 visible={isInputModal}
                 onHideInputModal={hideInputModal}
             />
