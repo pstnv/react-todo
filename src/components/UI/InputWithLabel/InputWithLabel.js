@@ -4,15 +4,16 @@ import style from "./InputWithLabel.module.css";
 
 function InputWithLabel({
     children,
-    type,
+    handleTitleChange,
     id,
     recordTitle,
-    handleTitleChange,
+    type,
+    visible,
 }) {
     const inputRef = useRef();
     useEffect(() => {
-        inputRef.current.focus();
-    });
+        visible ? inputRef.current.focus() : inputRef.current.blur();
+    }, [visible]);
     return (
         <>
             <label htmlFor={id}>{children}</label>
@@ -30,13 +31,15 @@ function InputWithLabel({
 
 InputWithLabel.propTypes = {
     children: PropTypes.node,
-    type: PropTypes.string,
+    handleTitleChange: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     recordTitle: PropTypes.string,
-    handleTitleChange: PropTypes.func.isRequired,
+    type: PropTypes.string,
+    visible: PropTypes.bool,
 };
 InputWithLabel.defaultProps = {
-    type: "text",
     children: "",
+    type: "text",
+    visible: false,
 };
 export default InputWithLabel;

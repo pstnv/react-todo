@@ -50,9 +50,10 @@ function AddRecordForm({
         >
             <form onSubmit={handleAddRecord} className={style.form}>
                 <InputWithLabel
+                    visible={visible}
                     id={id}
-                    recordTitle={recordTitle}
                     handleTitleChange={handleTitleChange}
+                    recordTitle={recordTitle}
                 />
                 <Button type="submit" styles={style.btn}>
                     {!recordTitle && updatingRecordTitle ? "Cancel" : "Ok"}
