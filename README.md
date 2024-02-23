@@ -25,6 +25,8 @@ REACT_APP_TABLE_NAME="your_table_name"
 - **React Router**
 - **Airtable**
 - **prop-types**
+- **GSAP**
+- **React Transition Group**
 
 ### Testing
 
@@ -43,11 +45,14 @@ The application integrates with Airtable, a cloud-based database, to store and m
 - **Add List**: Click "+" button and enter the list name in the input field.
 - **Rename List**: Click "Rename" button (pencil icon) next to the list and enter the new list name in the input field.
 - **Remove List**: Click "Delete" button (trash icon) next to the list.
+- **Sort List**: Click "Sort" button (two way arrows icon) in the top right corner and choose one of the options - "A to Z", "Z to A".
 - **Open list tasks**: Click the list once.
+
 - **Add Task**: Enter the task name in the input field and click the "Ok" button.
 - **Edit Task**: Click "Rename" button (pencil icon) next to the task and enter the new task name in the input field.
 - **Remove Task**: Click "Delete" button (cross icon) next to the task.
 - **Complete Task**: Click the task once. To cancel completion - click the task once again.
+- **Sort List**: Click "Sort" button (two way arrows icon) in the top right corner and choose one of the options - "Newest", "Oldest", "Recently Edited", "A to Z", "Z to A".
 
 # react-todo
 Code the Dream - React class Flamingo
