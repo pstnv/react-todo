@@ -5,14 +5,7 @@ import style from "./ListsItem.module.css";
 import iconEdit from "../../assets/icons/edit.png";
 import iconDelete from "../../assets/icons/deleteList.png";
 
-function ListsItem({ id, name, onRenameList, onDeleteList }) {
-    const onClickEditHandler = () => {
-        const newTitle = prompt("Enter new name", name);
-        if (!newTitle) {
-            return;
-        }
-        onRenameList(id, newTitle);
-    };
+function ListsItem({ id, name, onEditList, onDeleteList }) {
     return (
         <li className={style.listItem}>
             <Link
@@ -22,15 +15,19 @@ function ListsItem({ id, name, onRenameList, onDeleteList }) {
             >
                 {name}
             </Link>
-            <Button styles={style.button} onClickHandler={onClickEditHandler}>
-                <img src={iconEdit} alt="edit todo" />
+            <Button
+                styles={style.button}
+                onClickHandler={onEditList}
+                params={[id, name]}
+            >
+                <img src={iconEdit} alt="edit list" />
             </Button>
             <Button
                 styles={style.button}
                 onClickHandler={onDeleteList}
                 params={[id, name]}
             >
-                <img src={iconDelete} alt="remove todo" />
+                <img src={iconDelete} alt="remove list" />
             </Button>
         </li>
     );
@@ -39,7 +36,7 @@ function ListsItem({ id, name, onRenameList, onDeleteList }) {
 ListsItem.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    onRenameList: PropTypes.func.isRequired,
+    onEditList: PropTypes.func.isRequired,
     onDeleteList: PropTypes.func.isRequired,
 };
 export default ListsItem;

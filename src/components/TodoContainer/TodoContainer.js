@@ -28,10 +28,10 @@ function TodoContainer() {
 
     const [todoList, setTodoList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSortModal, setSortModal] = useState(false);
     const [sortOption, setSortOption] = useState(defaultSorting);
     const [updatingTodoId, setUpdatingTodoId] = useState(null);
     const [updatingTodoTitle, setUpdatingTodoTitle] = useState("");
-    const [isSortModal, setSortModal] = useState(false);
     const [isInputModal, setInputModal] = useState(false);
 
     const fetchTodos = useCallback(async () => {
@@ -183,19 +183,19 @@ function TodoContainer() {
             <Header styles={style.header} setSortModal={setSortModal}>
                 <h1 className={style.title}>{tableName} </h1>
             </Header>
-            <AddTodoForm
-                onAddTodo={addTodo}
-                updatingTodoTitle={updatingTodoTitle}
-                onUpdateTodo={updateTodo}
-                visible={isInputModal}
-                onHideInputModal={hideInputModal}
-            />
             <SortModal
                 sortOptions={sortOptions}
                 onSortTodoList={sortTodoList}
                 selectedSorting={sortOption}
                 visible={isSortModal}
                 setSortModal={setSortModal}
+            />
+            <AddTodoForm
+                onAddTodo={addTodo}
+                updatingTodoTitle={updatingTodoTitle}
+                onUpdateTodo={updateTodo}
+                visible={isInputModal}
+                onHideInputModal={hideInputModal}
             />
             {isLoading ? (
                 <p className={style.loading}>Loading...</p>

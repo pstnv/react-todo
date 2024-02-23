@@ -1,0 +1,45 @@
+.form {
+    margin: 60px 0 30px;
+    padding: 0;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}
+.modal {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+}
+.modal.active {
+    display: flex;
+    border: 2px solid red;
+}
+.btn {
+    margin-left: 20px;
+    padding: 5px;
+    min-width: 60px;
+    border: none;
+    border-radius: 2px;
+    background-color: rgba(236, 232, 233, 1);
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgb(0,0,0);
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: rgb(218, 216, 216);
+}
+
+@media all and (max-width: 600px) {
+    .form {
+        margin: 30px 0 25px;
+        padding: 0 10px;
+        height: 35px;
+    }
+    .btn {
+        margin-left: 10px;
+        min-width: 40px;
+    }
+}

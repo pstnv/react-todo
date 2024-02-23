@@ -7,6 +7,7 @@ import Lists from "../Lists/Lists";
 import style from "./ListsContainer.module.css";
 import Footer from "../Footer/Footer";
 import SortModal from "../SortModal/SortModal";
+import AddListForm from "../AddListForm/AddListForm";
 import { useFilteredAndSortedLists } from "../../customHooks/useFilteredLists";
 
 const SORT_LISTS_KEY = "listsSorting";
@@ -27,6 +28,9 @@ function ListsContainer() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSortModal, setSortModal] = useState(false);
     const [sortOption, setSortOption] = useState(defaultSorting);
+    const [updatingListId, setUpdatingListId] = useState(null);
+    const [updatingListTitle, setUpdatingListTitle] = useState("");
+    const [isInputModal, setInputModal] = useState(false);
 
     useEffect(() => {
         async function showLists() {
@@ -49,8 +53,7 @@ function ListsContainer() {
 
     const filteredAndSortedLists = useFilteredAndSortedLists(isLoading, lists, sortOption);
     
-    async function addList() {
-        const tableName = prompt("Enter new list name.");
+    async function addList(tableName) {
         if (!tableName) {
             return;
         }
@@ -68,23 +71,35 @@ function ListsContainer() {
         setLists([...lists, newList]);
     }
 
-    async function renameList(id, title) {
+    function editList(id, title) {
+        setUpdatingListId(id);
+        setUpdatingListTitle(title);
+        setInputModal(true);
+    }
+
+    async function updateList(title) {
+        setUpdatingListTitle("");
+        if (!title) {
+            setUpdatingListId(null);
+            return;
+        }
         const editedList = {
             name: title,
         };
         const data = await fetchData(
             urlTablesAPI,
             options.patch(editedList),
-            id
+            updatingListId
         );
         if (!data) {
             setIsLoading(true);
             return;
         }
         const updatedLists = lists.map((list) => {
-            return list.id === id ? { ...list, name: title } : list;
+            return list.id === updatingListId ? { ...list, name: title } : list;
         });
         setLists(updatedLists);
+        setUpdatingListId(null);
     }
 
     async function deleteList(id, name) {
@@ -130,6 +145,12 @@ function ListsContainer() {
         localStorage.setItem(SORT_LISTS_KEY, JSON.stringify(option));
     }
 
+    function hideInputModal() {
+        setInputModal(false);
+        setUpdatingListId(null);
+        setUpdatingListTitle("");
+    }
+
     return (
         <div className={style.container}>
             <Header styles={style.header} setSortModal={setSortModal}>
@@ -138,6 +159,13 @@ function ListsContainer() {
                     <span>Notes</span>
                 </div>
             </Header>
+            <AddListForm
+                onAddList={addList}
+                updatingListTitle={updatingListTitle}
+                onUpdateList={updateList}
+                visible={isInputModal}
+                onHideInputModal={hideInputModal}
+            />
             <SortModal
                 sortOptions={sortOptions}
                 onSortTodoList={sortTodoList}
@@ -151,10 +179,10 @@ function ListsContainer() {
                 <>
                     <Lists
                         lists={filteredAndSortedLists}
-                        onRenameList={renameList}
+                        onEditList={editList}
                         onDeleteList={deleteList}
                     />
-                    <Footer onClickHandler={addList} />
+                    <Footer onClickHandler={() => setInputModal(true)} />
                 </>
             )}
         </div>
