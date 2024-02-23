@@ -12,7 +12,7 @@ function AddTodoForm({
     updatingTodoTitle,
     onUpdateTodo,
     visible,
-    setInputModal,
+    onHideInputModal,
 }) {
     const [todoTitle, setTodoTitle] = useState("");
 
@@ -20,12 +20,6 @@ function AddTodoForm({
     if (visible) {
         modalClasses.push(style.active);
     }
-
-    const onHideModal = () => {
-        setTodoTitle("");
-        setInputModal(false);
-    };
-
     function handleTitleChange(e) {
         const newTodoTitle = e.target.value;
         setTodoTitle(newTodoTitle);
@@ -33,9 +27,9 @@ function AddTodoForm({
     function handleAddTodo(e) {
         e.preventDefault();
         updatingTodoTitle ? onUpdateTodo(todoTitle) : onAddTodo(todoTitle);
-        onHideModal();
+        setTodoTitle("");
+        onHideInputModal();
     }
-
     useEffect(() => {
         setTodoTitle(updatingTodoTitle);
     }, [updatingTodoTitle]);
@@ -45,7 +39,7 @@ function AddTodoForm({
             visible={visible}
             animated={animated}
             propStyle={modalClasses.join(" ")}
-            onHideModal={onHideModal}
+            onHideModal={onHideInputModal}
         >
             <form onSubmit={handleAddTodo} className={style.form}>
                 <InputWithLabel

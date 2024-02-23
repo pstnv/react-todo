@@ -105,6 +105,7 @@ function TodoContainer() {
     function editTodo(id, title) {
         setUpdatingTodoId(id);
         setUpdatingTodoTitle(title);
+        setInputModal(true);
     }
 
     async function updateTodo(title) {
@@ -172,6 +173,12 @@ function TodoContainer() {
         localStorage.setItem(SORT_KEY, JSON.stringify(option));
     }
 
+    function hideInputModal() {
+        setInputModal(false);
+        setUpdatingTodoId(null);
+        setUpdatingTodoTitle("");
+    }
+
     return (
         <div className={style.container}>
             <Header styles={style.header} setSortModal={setSortModal}>
@@ -183,7 +190,7 @@ function TodoContainer() {
                 updatingTodoTitle={updatingTodoTitle}
                 onUpdateTodo={updateTodo}
                 visible={isInputModal}
-                setInputModal={setInputModal}
+                onHideInputModal={hideInputModal}
             />
             <SortModal
                 sortOptions={sortOptions}
